@@ -1,0 +1,21 @@
+{
+  "name": "cwLayoutCustomQuery",
+  "description": "Allow users to create their own filter and to display data using charts",
+  "version": "0.0.0",
+  "main": "cwLayoutCustomQuery.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JGrndn/cwLayoutCustomQuery"
+  },
+  "author": "Jerome GRONDIN",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/JGrndn/cwLayoutCustomQuery/issues"
+  },
+  "homepage": "",
+  "wiki": "https://github.com/JGrndn/cwLayoutCustomQuery/wiki",
+  "evolve-version": "4.2"
+}

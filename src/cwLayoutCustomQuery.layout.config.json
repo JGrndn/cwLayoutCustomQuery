@@ -1,0 +1,6 @@
+{
+	"Name": "cw-layout-custom-query",
+	"DisplayName": "Custom Query",
+	"Description": "Allow users to filter data",
+	"JavaScriptClassName": "cwLayoutCustomQuery"
+}

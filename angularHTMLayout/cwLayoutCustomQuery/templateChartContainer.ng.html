@@ -1,0 +1,82 @@
+<div class="display-chart-option">
+  <div class="chart-options-container" ng-class="{'cw-visible':chart.display, 'cw-hidden':!chart.display}">
+    Type of chart : <select class="custom-query-type-chart" ng-model="chart.type" ng-options="x.value as x.label for x in chart.availableCharts" ng-change="refreshChart()"></select>
+    <!--Pie chart options -->
+    <div class="pie-options-container" ng-if="chart.type=='pie'">
+      <div class="custom-query-chart-options custom-query-pie-chart-options custom-query-chart-series">
+        Series : <select ng-model="chart.options.pie.series" ng-options="x as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])" ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-pie-chart-options custom-query-chart-operation">
+        Operation : <select ng-model="chart.options.pie.operation" ng-options="x.value as x.label for x in chart.options.pie.availableOperations" ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-pie-chart-options custom-query-chart-operation-property" ng-if="chart.options.pie.operation=='sum'">
+        Property : <select ng-model="chart.options.pie.pOperation" ng-options="x as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])" ng-change="refreshChart()"></select>
+      </div>
+    </div>
+    <!--Bar chart options -->
+    <div class="bar-options-container" ng-if="chart.type=='bar'">
+      <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-series">
+        Series :
+        <select ng-model="chart.options.bar.series" ng-options="x as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])" ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-operation">
+        Operation :
+        <select ng-model="chart.options.bar.operation" ng-options="x.value as x.label for x in chart.options.bar.availableOperations"
+          ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-operation-property" ng-if="chart.options.bar.operation=='sum'">
+        Property :
+        <select ng-model="chart.options.bar.pOperation" ng-options="x as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])" ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-axis-property">
+        Axis : <select ng-model="chart.options.bar.pAxis" ng-options="x as x.name for x in selectedProperties | orderBy:'name'" ng-change="refreshChart()"></select>
+      </div>
+    </div>
+    <!--Line chart options -->
+    <div class="line-options-container" ng-if="chart.type=='line'">
+      <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-series">
+        Series :
+        <select ng-model="chart.options.line.series" ng-options="x as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])"
+          ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-operation">
+        Operation :
+        <select ng-model="chart.options.line.operation" ng-options="x.value as x.label for x in chart.options.line.availableOperations"
+          ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-operation-property" ng-if="chart.options.line.operation=='sum'">
+        Property :
+        <select ng-model="chart.options.line.pOperation" ng-options="x as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])"
+          ng-change="refreshChart()"></select>
+      </div>
+      <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-axis-property">
+        Axis :
+        <select ng-model="chart.options.line.pAxis" ng-options="x as x.name for x in selectedProperties | orderBy:'name'"
+          ng-change="refreshChart()"></select>
+      </div>
+    </div>
+  </div>  
+</div>
+<div class="display-chart-chk btn" ng-click="chart.display = !chart.display">
+  <i class="fa fa-pie-chart" ng-class="{'cw-visible':!chart.display, 'cw-hidden':chart.display}"></i>
+  <i class="fa fa-ban" ng-class="{'cw-visible':chart.display, 'cw-hidden':!chart.display}"></i>
+</div>
+<!-- display charts -->
+<div class="chart-container" ng-class="{'cw-visible':chart.display, 'cw-hidden':!chart.display}">
+  <div class="chart-actions">
+    <div class="chart-action-btn btn-stack-bar-chart btn" ng-if="chart.type=='bar'" ng-click="chart.options.bar.displayStackedBar=!chart.options.bar.displayStackedBar">
+      <i class="fa fa-cube"></i>
+    </div>
+  </div>
+  <canvas ng-if="chart.type=='line'" class="chart chart-line" chart-data="chart.data" chart-labels="chart.labels" chart-series="chart.series" chart-options="chart.options.line.options">
+  </canvas>
+  <canvas ng-if="chart.type=='bar' && chart.options.bar.displayStackedBar==false" class="chart chart-bar" chart-data="chart.data" chart-labels="chart.labels" chart-series="chart.series" chart-options="chart.options.bar.options">
+  </canvas>
+  <canvas ng-if="chart.type=='bar' && chart.options.bar.displayStackedBar==true" class="chart chart-bar" chart-data="chart.data"
+    chart-labels="chart.labels" chart-series="chart.series" chart-options="chart.options.bar.stackedOptions">
+  </canvas>
+  <canvas ng-if="chart.type=='pie'" class="chart chart-pie" chart-data="chart.data" chart-labels="chart.labels" chart-options="chart.options.pie.options">
+  </canvas>
+  <canvas ng-if="chart.type=='radar'" class="chart chart-radar" chart-data="chart.data" chart-labels="chart.labels" chart-options="chart.options.radar.options">
+  </canvas>
+</div>

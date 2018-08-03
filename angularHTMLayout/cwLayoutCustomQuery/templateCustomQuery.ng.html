@@ -1,0 +1,19 @@
+<div ng-controller="cwCustomQueryController" class="cwLayoutCustomQuery">
+  <div data-target-scriptname="{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}" data-node-id="{{::node.nodeID}}" class="property-box {{::node.nodeID}}-node-box property-box-asso cw-visible">
+    <ul class="htmlbox-container property-details {{::node.nodeID}}-details {{::node.nodeID}}-{{::objectId}}-details">
+      <li id="htmlbox-header-{{::node.nodeID}}" class="htmlbox-header property-details {{::node.nodeID}}-details property-title {{::node.nodeID}}-title {{::node.nodeID}}-{{::objectId}}-details">
+        <div class="cw-property-details-left">
+          <label class="cw-property-title-displayname">{{$root.cwApi.mapToTranslation(node.mmNode.NodeName)}}</label>
+        </div>
+        <div class="cw-property-details-filter-right">
+          <div class="btn filter-icon" ng-click="toggleFilter()" ng-class="{'filter-open':displayFilterBox, 'filter-close':!displayFilterBox}">
+              <i class="fa fa-filter"></i>
+          </div>
+        </div>
+      </li>
+      <li class="{{::node.nodeID}}-filter-container property-title filter-container" ng-if="displayFilterBox" ng-include="templates.filterContainer"></li>
+      <li id="{{::node.nodeID}}-{{::objectId}}-value" class="property-details property-value {{::node.nodeID}}-details {{::node.nodeID}}-value {{::node.nodeID}}-{{::objectId}}-details" ng-include="templates.dataContainer">
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="custom-query-result-container">
+  <div class="custom-query-result-list">
+    <div class="display-result">{{items.length}} items found.</div>
+    <ul class="cw-list {{::node.nodeID}} {{::node.nodeID}}-list-box ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}} cw-visible "
+      data-association-key="{{::node.nodeID}}">
+      <li ng-repeat="item in items.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))" data-item-name="{{::item.name}}" data-item-id="{{::item.object_id}}" data-item-objecttypescriptname="{{node.mmNode.ObjectTypeScriptName.toLowerCase()}}" class="cw-item {{node.nodeID}} {{node.nodeID}}-{{item.object_id}} ot-{{node.mmNode.ObjectTypeScriptName.toLowerCase()}}">
+        <div class="{{::node.nodeID}} ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}">
+          <div ng-bind-html="item.displayName"></div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="custom-query-viewby-container">
+      <select class="custom-query-viewby" ng-model="viewby" ng-change="setItemsPerPage(viewby)">
+        <option>25</option>
+        <option>50</option>
+        <option>100</option>
+      </select> items
+    </div>
+    <div class="bootstrap-iso">
+      <ul uib-pagination boundary-links="true" boundary-link-numbers="true" max-size="maxSize" total-items="totalItems" ng-model="currentPage" class="pagination-sm" items-per-page="itemsPerPage" previous-text="&lsaquo;"
+      next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+    </div>
+  </div>
+  <div class="custom-query-result-chart" ng-include="templates.chartContainer"></div>
+</div>  
