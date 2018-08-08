@@ -1,5 +1,3 @@
-
-
 # Description
 This layout allows users to set up their own filters when displaying list of objects. It can also be used so they can display charts.
 
