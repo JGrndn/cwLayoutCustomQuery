@@ -260,6 +260,15 @@
     };
   };
 
+  cwLayout.prototype.setLayoutOptions = function(){
+    try {
+      this.initFilters = (this.options.CustomOptions['init-filters'] === 'init-filters') ? [] : JSON.parse(this.options.CustomOptions['init-filters']);
+    }
+    catch (err) {
+      this.initFilters = [];
+    }
+  };
+
   cwLayout.prototype.applyJavaScript = function () {
     var that = this;
     cwApi.CwAsyncLoader.load('angular', function () {
@@ -268,12 +277,7 @@
       templatePath = that.getTemplatePath('cwLayoutCustomQuery', 'templateCustomQuery');
       
       // layout options
-      try{
-        that.initFilters = (that.options.CustomOptions['init-filters'] === 'init-filters') ? [] : JSON.parse(that.options.CustomOptions['init-filters']);
-      }
-      catch(err) {
-        that.initFilters = [];
-      }
+      that.setLayoutOptions();
 
       loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope) {
         $scope.objectId = that.objectId;
