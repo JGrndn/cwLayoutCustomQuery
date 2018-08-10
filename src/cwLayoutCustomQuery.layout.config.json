@@ -8,5 +8,10 @@
 		"DisplayName":"Init filters",
 		"Description":"Set intial values for filters using JSON syntax",
 		"Type":0
+		},{
+		"Id":"pagination-options",
+		"DisplayName":"Pagination options",
+		"Description":"Set the options of the pagination module, using JSON syntax",
+		"Type":0
 		}]
 }

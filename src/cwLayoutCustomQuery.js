@@ -177,9 +177,9 @@
   cwLayout.prototype.getDataForBarChart = function (items, opt) {
     var i, pSeries, pOperand, pAxis, itemsBySeries = {}, itemsByLabels = {}, s, l, res = { data: [], labels: [], series: [] };
     if (opt.series !== null && opt.pAxis !== null && (opt.operation === 'count' || (opt.operation === 'sum' && opt.pOperation !== null))) {
-      pSeries = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series.scriptName);
-      pAxis = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pAxis.scriptName);
-      pOperand = opt.operation === 'sum' ? cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pOperation.scriptName) : null;
+      pSeries = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series);
+      pAxis = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pAxis);
+      pOperand = opt.operation === 'sum' ? cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pOperation) : null;
       itemsBySeries = groupByInArray(items, pSeries.scriptName);
       itemsByLabels = groupByInArray(items, pAxis.scriptName);
       if (pSeries.type === 'Lookup') {
@@ -238,8 +238,8 @@
     var p, pOp, data = [], labels = [], series = [];
 
     if (opt.series !== null && (opt.operation === 'count' || (opt.operation === 'sum' && opt.pOperation !== null))) {
-      p = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series.scriptName);
-      pOp = opt.operation === 'sum' ? cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pOperation.scriptName) : null;
+      p = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series);
+      pOp = opt.operation === 'sum' ? cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pOperation) : null;
       if (p.type === 'Lookup') {
         for (i = 0; i < p.lookups.length; i += 1) {
           labels.push(translateText(p.lookups[i].name));
@@ -261,11 +261,46 @@
   };
 
   cwLayout.prototype.setLayoutOptions = function(){
+    var pOpt, setDefaultPaginationOptions = function(){
+      return {
+        itemsPerPage: {
+          availableValues: [25, 50, 100],
+          value: 25
+        },
+        currentPage: 1,
+        maxSize: 3 //Number of pager buttons to show
+      };
+    };
+
+    // filters options
     try {
-      this.initFilters = (this.options.CustomOptions['init-filters'] === 'init-filters') ? [] : JSON.parse(this.options.CustomOptions['init-filters']);
-    }
-    catch (err) {
+      this.initFilters = (this.options.CustomOptions['init-filters'] === '') ? [] : JSON.parse(this.options.CustomOptions['init-filters']);
+    } catch (err) {
       this.initFilters = [];
+    }
+    // pagination options
+    try{
+      if (this.options.CustomOptions['pagination-options'] === ''){
+        this.paginationOptions = setDefaultPaginationOptions();
+      } else {
+        pOpt = JSON.parse(this.options.CustomOptions['pagination-options']);
+        this.paginationOptions = {
+          currentPage : 1,
+          maxSize: 3,
+          itemsPerPage:{
+            availableValues: pOpt.selectItemsPerPage,
+            value : pOpt.nbItemsPerPage 
+          }
+        };
+      }
+    } catch(err){
+      this.paginationOptions = setDefaultPaginationOptions();
+    }
+    // chart options
+    try{
+
+    } catch(err){
+
     }
   };
 
@@ -292,15 +327,7 @@
         $scope.propertiesMetadata = that.propertiesMetaData;
 
         // pagination
-        $scope.pagination = {
-          totalItems : $scope.items.length,
-          currentPage : 1,
-          itemsPerPage : {
-            availableValues: [25, 50, 100],
-            value:25
-          },
-          maxSize : 3 //Number of pager buttons to show
-        };
+        $scope.pagination = that.paginationOptions;
 
         // filters
         $scope.setItemsPerPage = function (num) {
@@ -323,12 +350,6 @@
         $scope.resetFilter = function (filter) {
           filter.operator = '';
           filter.value = '';
-        };
-        $scope.isPropertySelected2 = function(f){
-          if (f.property && $scope.propertiesMetadata[f.property.scriptName].type){
-            return true;
-          }
-          return false;
         };
         $scope.applyFilters = function(evt){
           if (evt) evt.preventDefault();
