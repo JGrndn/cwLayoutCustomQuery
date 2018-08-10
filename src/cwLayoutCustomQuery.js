@@ -288,11 +288,15 @@
         $scope.propertiesMetadata = that.propertiesMetaData;
 
         // pagination
-        $scope.totalItems = $scope.items.length;
-        $scope.currentPage = 1;
-        $scope.viewby = 25;
-        $scope.itemsPerPage = $scope.viewby;
-        $scope.maxSize = 3; //Number of pager buttons to show
+        $scope.pagination = {
+          totalItems : $scope.items.length,
+          currentPage : 1,
+          itemsPerPage : {
+            availableValues: [25, 50, 100],
+            value:25
+          },
+          maxSize : 3 //Number of pager buttons to show
+        };
 
         // filters
         $scope.setItemsPerPage = function (num) {
