@@ -335,7 +335,8 @@
         };
         // charts
         $scope.chart = {
-          display: false,
+          displayChart: true,
+          displaySettings : true,
           availableCharts : [{value:'pie', label:'Pie'}, {value:'bar', label:'Bar'}, {value:'line', label:'Line'}],
           type: null,
           options:{

@@ -1,5 +1,5 @@
 <div class="display-chart-option">
-  <div class="chart-options-container" ng-class="{'cw-visible':chart.display, 'cw-hidden':!chart.display}">
+  <div class="chart-options-container" ng-class="{'cw-visible':chart.displaySettings, 'cw-hidden':!chart.displaySettings}">
     Type of chart : <select class="custom-query-type-chart" ng-model="chart.type" ng-options="x.value as x.label for x in chart.availableCharts" ng-change="refreshChart()"></select>
     <!--Pie chart options -->
     <div class="pie-options-container" ng-if="chart.type=='pie'">
@@ -57,12 +57,18 @@
     </div>
   </div>  
 </div>
-<div class="display-chart-chk btn" ng-click="chart.display = !chart.display">
-  <i class="fa fa-pie-chart" ng-class="{'cw-visible':!chart.display, 'cw-hidden':chart.display}"></i>
-  <i class="fa fa-ban" ng-class="{'cw-visible':chart.display, 'cw-hidden':!chart.display}"></i>
+<div class="display-chart-settings-container">
+  <div class="display-chart-settings btn" ng-click="chart.displaySettings=!chart.displaySettings">
+    <i class="fa fa-chevron-up" ng-class="{'cw-visible':chart.displaySettings, 'cw-hidden':!chart.displaySettings}"></i>
+    <i class="fa fa-gear" ng-class="{'cw-visible':!chart.displaySettings, 'cw-hidden':chart.displaySettings}"></i>
+  </div>
+  <div class="display-chart-chk btn" ng-click="chart.displayChart=!chart.displayChart">
+    <i class="fa fa-pie-chart" ng-class="{'cw-visible':!chart.displayChart, 'cw-hidden':chart.displayChart}"></i>
+    <i class="fa fa-ban" ng-class="{'cw-visible':chart.displayChart, 'cw-hidden':!chart.displayChart}"></i>
+  </div>
 </div>
 <!-- display charts -->
-<div class="chart-container" ng-class="{'cw-visible':chart.display, 'cw-hidden':!chart.display}">
+<div class="chart-container" ng-class="{'cw-visible':chart.displayChart, 'cw-hidden':!chart.displayChart}">
   <div class="chart-actions">
     <div class="chart-action-btn btn-stack-bar-chart btn" ng-if="chart.type=='bar'" ng-click="chart.options.bar.displayStackedBar=!chart.options.bar.displayStackedBar">
       <i class="fa fa-cube"></i>
