@@ -8,6 +8,7 @@
     cwApi.extend(this, cwApi.cwLayouts.CwLayout, options, viewSchema);
     this.drawOneMethod = cwApi.cwLayouts.cwLayoutList.drawOne.bind(this);
     cwApi.registerLayoutForJSActions(this);
+    this.initFilters = [];
   };
   
   cwLayout.prototype.getTemplatePath = function (folder, templateName) {
@@ -19,9 +20,9 @@
     for (i = 0; i < filters.length; i += 1) {
       filter = filters[i];
       if (filter.property && filter.operator && filter.value != '') {
-        propValue = item.properties[filter.property.scriptName];
+        propValue = item.properties[filter.property];
         filterValue = filter.value;
-        pt = cwApi.mm.getProperty(item.objectTypeScriptName, filter.property.scriptName);
+        pt = cwApi.mm.getProperty(item.objectTypeScriptName, filter.property);
         if (pt.type === 'Date'){
           propValue = new Date(propValue);
           filterValue = new Date(filter.value);
@@ -111,6 +112,7 @@
         case 'Lookup':
           this.propertiesMetaData[p.scriptName].type = 'lookup';
           this.propertiesMetaData[p.scriptName].operators = ['=', '!='];
+          this.propertiesMetaData[p.scriptName].lookups = p.lookups;
           break;
         case 'Date':
           this.propertiesMetaData[p.scriptName].type = 'date';
@@ -265,6 +267,14 @@
       loader.setup();
       templatePath = that.getTemplatePath('cwLayoutCustomQuery', 'templateCustomQuery');
       
+      // layout options
+      try{
+        that.initFilters = (that.options.CustomOptions['init-filters'] === 'init-filters') ? [] : JSON.parse(that.options.CustomOptions['init-filters']);
+      }
+      catch(err) {
+        that.initFilters = [];
+      }
+
       loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope) {
         $scope.objectId = that.objectId;
         $scope.node = that;
@@ -293,7 +303,7 @@
         $scope.toggleFilter = function(){
           $scope.displayFilterBox = !$scope.displayFilterBox;
         };
-        $scope.filters = []; 
+        $scope.filters = that.initFilters; 
         $scope.addFilter = function (evt) {
           evt.preventDefault();
           $scope.filters.push({});
@@ -306,14 +316,14 @@
           filter.operator = '';
           filter.value = '';
         };
-        $scope.isPropertySelected = function(f){
+        $scope.isPropertySelected2 = function(f){
           if (f.property && $scope.propertiesMetadata[f.property.scriptName].type){
             return true;
           }
           return false;
         };
         $scope.applyFilters = function(evt){
-          evt.preventDefault();
+          if (evt) evt.preventDefault();
           var i=0, items = [];
           for(i=0; i<that.allItems.length; i+=1){
             if(that.matchCriteria(that.allItems[i], $scope.filters)){
@@ -398,6 +408,8 @@
           $scope.chart.data = data.data;
           $scope.chart.series = data.series;
         };
+
+        $scope.applyFilters();
       });
     });
   };
