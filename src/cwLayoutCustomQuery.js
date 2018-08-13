@@ -8,7 +8,7 @@
     cwApi.extend(this, cwApi.cwLayouts.CwLayout, options, viewSchema);
     this.drawOneMethod = cwApi.cwLayouts.cwLayoutList.drawOne.bind(this);
     cwApi.registerLayoutForJSActions(this);
-    this.initFilters = [];
+    this.optionsManager = new cwApi.cwLayouts.cwLayoutCustomQuery.optionsManager();
   };
   
   cwLayout.prototype.getTemplatePath = function (folder, templateName) {
@@ -260,49 +260,7 @@
     };
   };
 
-  cwLayout.prototype.setLayoutOptions = function(){
-    var pOpt, setDefaultPaginationOptions = function(){
-      return {
-        itemsPerPage: {
-          availableValues: [25, 50, 100],
-          value: 25
-        },
-        currentPage: 1,
-        maxSize: 3 //Number of pager buttons to show
-      };
-    };
-
-    // filters options
-    try {
-      this.initFilters = (this.options.CustomOptions['init-filters'] === '') ? [] : JSON.parse(this.options.CustomOptions['init-filters']);
-    } catch (err) {
-      this.initFilters = [];
-    }
-    // pagination options
-    try{
-      if (this.options.CustomOptions['pagination-options'] === ''){
-        this.paginationOptions = setDefaultPaginationOptions();
-      } else {
-        pOpt = JSON.parse(this.options.CustomOptions['pagination-options']);
-        this.paginationOptions = {
-          currentPage : 1,
-          maxSize: 3,
-          itemsPerPage:{
-            availableValues: pOpt.selectItemsPerPage,
-            value : pOpt.nbItemsPerPage 
-          }
-        };
-      }
-    } catch(err){
-      this.paginationOptions = setDefaultPaginationOptions();
-    }
-    // chart options
-    try{
-
-    } catch(err){
-
-    }
-  };
+  
 
   cwLayout.prototype.applyJavaScript = function () {
     var that = this;
@@ -312,7 +270,7 @@
       templatePath = that.getTemplatePath('cwLayoutCustomQuery', 'templateCustomQuery');
       
       // layout options
-      that.setLayoutOptions();
+      that.optionsManager.setLayoutOptions(that.options.CustomOptions);
 
       loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope) {
         $scope.objectId = that.objectId;
@@ -327,7 +285,7 @@
         $scope.propertiesMetadata = that.propertiesMetaData;
 
         // pagination
-        $scope.pagination = that.paginationOptions;
+        $scope.pagination = that.optionsManager.paginationOptions;
 
         // filters
         $scope.setItemsPerPage = function (num) {
@@ -338,7 +296,7 @@
         $scope.toggleFilter = function(){
           $scope.displayFilterBox = !$scope.displayFilterBox;
         };
-        $scope.filters = that.initFilters; 
+        $scope.filters = that.optionsManager.initFilters; 
         $scope.addFilter = function (evt) {
           evt.preventDefault();
           $scope.filters.push({});
@@ -363,66 +321,7 @@
           $scope.refreshChart();
         };
         // charts
-        $scope.chart = {
-          displayChart: true,
-          displaySettings : true,
-          availableCharts : [{value:'pie', label:'Pie'}, {value:'bar', label:'Bar'}, {value:'line', label:'Line'}],
-          type: null,
-          options:{
-            pie:{
-              series: null,
-              availableOperations: [{ value: 'count', label: 'Count' }, { value: 'sum', label: 'Sum' }],
-              operation: 'count',
-              pOperation: null,
-              options:{
-                legend: {
-                  display: true
-                }
-              }
-            },
-            bar:{
-              series: null,
-              availableOperations: [{ value: 'count', label: 'Count' }, { value: 'sum', label: 'Sum' }],
-              operation: 'count',
-              pOperation: null,
-              pAxis:null,
-              displayStackedBar : false,
-              options:{
-                legend:{
-                  display: true
-                }
-              }, 
-              stackedOptions:{
-                legend:{
-                  display : true
-                },
-                scales:{
-                  xAxes: [{
-                    stacked: true
-                  }],
-                  yAxes: [{
-                    stacked: true
-                  }]
-                }
-              }
-            },
-            line: {
-              series: null,
-              availableOperations: [{ value: 'count', label: 'Count' }, { value: 'sum', label: 'Sum' }],
-              operation: 'count',
-              pOperation: null,
-              pAxis: null,
-              options: {
-                legend: {
-                  display: true
-                }
-              },
-            }
-          },
-          data:[],
-          labels:[],
-          series:[]
-        };
+        $scope.chart = that.optionsManager.chartOptions;
 
         $scope.filterProperties = function(lstType){
           return function(item){

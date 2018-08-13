@@ -6,7 +6,7 @@
           <label class="cw-property-title-displayname">{{$root.cwApi.mapToTranslation(node.mmNode.NodeName)}}</label>
         </div>
         <div class="cw-property-details-filter-right">
-          <div class="btn filter-icon" ng-click="toggleFilter()" ng-class="{'filter-open':displayFilterBox, 'filter-close':!displayFilterBox}">
+          <div class="btn filter-icon" ng-click="displayFilterBox=!displayFilterBox" ng-class="{'filter-open':displayFilterBox, 'filter-close':!displayFilterBox}">
               <i class="fa fa-filter"></i>
           </div>
         </div>

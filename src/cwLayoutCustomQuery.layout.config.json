@@ -13,5 +13,10 @@
 		"DisplayName":"Pagination options",
 		"Description":"Set the options of the pagination module, using JSON syntax",
 		"Type":0
+		},{
+			"Id":"chart-options",
+			"DisplayName":"Chart options",
+			"Description":"Set the options of the chart module, using JSON syntax",
+			"Type":0
 		}]
 }
