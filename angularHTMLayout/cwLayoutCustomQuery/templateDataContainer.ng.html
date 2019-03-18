@@ -11,7 +11,7 @@
     </ul>
 
     <div class="custom-query-viewby-container">
-      <select class="custom-query-viewby" ng-model="pagination.itemsPerPage.value" ng-options="x for x in pagination.itemsPerPage.availableValues"></select> items
+      <select class="custom-query-viewby custom-query-select" ng-model="pagination.itemsPerPage.value" ng-options="x for x in pagination.itemsPerPage.availableValues"></select> items
     </div>
     <div class="bootstrap-iso">
       <ul uib-pagination boundary-links="true" boundary-link-numbers="true" max-size="pagination.maxSize" total-items="items.length" ng-model="pagination.currentPage" class="pagination-sm" items-per-page="pagination.itemsPerPage.value" previous-text="&lsaquo;"

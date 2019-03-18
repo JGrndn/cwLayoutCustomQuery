@@ -9,6 +9,8 @@
     this.drawOneMethod = cwApi.cwLayouts.cwLayoutList.drawOne.bind(this);
     cwApi.registerLayoutForJSActions(this);
     this.optionsManager = new cwApi.cwLayouts.cwLayoutCustomQuery.optionsManager();
+
+    this.trueFalseArray = [translateText('true'), translateText('false')];
   };
   
   cwLayout.prototype.getTemplatePath = function (folder, templateName) {
@@ -103,6 +105,7 @@
         case 'Boolean':
           this.propertiesMetaData[p.scriptName].type = 'checkbox';
           this.propertiesMetaData[p.scriptName].operators = ['=', '!='];
+          this.propertiesMetaData[p.scriptName].values = [{label:$.i18n.prop('global_true'),value:true},{label:$.i18n.prop('global_false'),value:false}];
           break;
         case 'Integer':
         case 'Double':
@@ -272,7 +275,7 @@
       // layout options
       that.optionsManager.setLayoutOptions(that.options.CustomOptions);
 
-      loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope, $sce) {
+      loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope) {
         $scope.objectId = that.objectId;
         $scope.node = that;
         $scope.templates = {
@@ -336,10 +339,6 @@
           $scope.chart.labels = data.labels;
           $scope.chart.data = data.data;
           $scope.chart.series = data.series;
-        };
-
-        $scope.getDisplayItem = function(item){
-          return $sce.trustAsHtml(item.displayName);
         };
 
         $scope.applyFilters();

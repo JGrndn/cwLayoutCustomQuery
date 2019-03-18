@@ -1,35 +1,35 @@
 <div class="display-chart-option">
   <div class="chart-options-container" ng-class="{'cw-visible':chart.displaySettings, 'cw-hidden':!chart.displaySettings}">
-    Type of chart : <select class="custom-query-type-chart" ng-model="chart.type" ng-options="x.value as x.label for x in chart.availableCharts" ng-change="refreshChart()"></select>
+    Type of chart : <select class="custom-query-select" class="custom-query-type-chart" ng-model="chart.type" ng-options="x.value as x.label for x in chart.availableCharts" ng-change="refreshChart()"></select>
     <!--Pie chart options -->
     <div class="pie-options-container" ng-if="chart.type=='pie'">
       <div class="custom-query-chart-options custom-query-pie-chart-options custom-query-chart-series">
-        Series : <select ng-model="chart.options.pie.series" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])" ng-change="refreshChart()"></select>
+        Series : <select class="custom-query-select" ng-model="chart.options.pie.series" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])" ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-pie-chart-options custom-query-chart-operation">
-        Operation : <select ng-model="chart.options.pie.operation" ng-options="x.value as x.label for x in chart.options.pie.availableOperations" ng-change="refreshChart()"></select>
+        Operation : <select class="custom-query-select" ng-model="chart.options.pie.operation" ng-options="x.value as x.label for x in chart.options.pie.availableOperations" ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-pie-chart-options custom-query-chart-operation-property" ng-if="chart.options.pie.operation=='sum'">
-        Property : <select ng-model="chart.options.pie.pOperation" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])" ng-change="refreshChart()"></select>
+        Property : <select class="custom-query-select" ng-model="chart.options.pie.pOperation" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])" ng-change="refreshChart()"></select>
       </div>
     </div>
     <!--Bar chart options -->
     <div class="bar-options-container" ng-if="chart.type=='bar'">
       <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-series">
         Series :
-        <select ng-model="chart.options.bar.series" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])" ng-change="refreshChart()"></select>
+        <select class="custom-query-select" ng-model="chart.options.bar.series" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])" ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-operation">
         Operation :
-        <select ng-model="chart.options.bar.operation" ng-options="x.value as x.label for x in chart.options.bar.availableOperations"
+        <select class="custom-query-select" ng-model="chart.options.bar.operation" ng-options="x.value as x.label for x in chart.options.bar.availableOperations"
           ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-operation-property" ng-if="chart.options.bar.operation=='sum'">
         Property :
-        <select ng-model="chart.options.bar.pOperation" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])" ng-change="refreshChart()"></select>
+        <select class="custom-query-select" ng-model="chart.options.bar.pOperation" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])" ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-bar-chart-options custom-query-chart-axis-property">
-        Axis : <select ng-model="chart.options.bar.pAxis" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'" ng-change="refreshChart()"></select>
+        Axis : <select class="custom-query-select" ng-model="chart.options.bar.pAxis" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'" ng-change="refreshChart()"></select>
       </div>
     </div>
     <!--Line chart options -->
@@ -41,28 +41,28 @@
       </div>
       <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-operation">
         Operation :
-        <select ng-model="chart.options.line.operation" ng-options="x.value as x.label for x in chart.options.line.availableOperations"
+        <select class="custom-query-select" ng-model="chart.options.line.operation" ng-options="x.value as x.label for x in chart.options.line.availableOperations"
           ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-operation-property" ng-if="chart.options.line.operation=='sum'">
         Property :
-        <select ng-model="chart.options.line.pOperation" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])"
+        <select class="custom-query-select" ng-model="chart.options.line.pOperation" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Integer', 'Double'])"
           ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-axis-property">
         Axis :
-        <select ng-model="chart.options.line.pAxis" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'"
+        <select class="custom-query-select" ng-model="chart.options.line.pAxis" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'"
           ng-change="refreshChart()"></select>
       </div>
     </div>
   </div>  
 </div>
 <div class="display-chart-settings-container">
-  <div class="display-chart-settings btn" ng-click="chart.displaySettings=!chart.displaySettings">
+  <div class="display-chart-settings btn page-action no-text" ng-click="chart.displaySettings=!chart.displaySettings">
     <i class="fa fa-chevron-up" ng-class="{'cw-visible':chart.displaySettings, 'cw-hidden':!chart.displaySettings}"></i>
     <i class="fa fa-gear" ng-class="{'cw-visible':!chart.displaySettings, 'cw-hidden':chart.displaySettings}"></i>
   </div>
-  <div class="display-chart-chk btn" ng-click="chart.displayChart=!chart.displayChart">
+  <div class="display-chart-chk btn page-action no-text" ng-click="chart.displayChart=!chart.displayChart">
     <i class="fa fa-pie-chart" ng-class="{'cw-visible':!chart.displayChart, 'cw-hidden':chart.displayChart}"></i>
     <i class="fa fa-ban" ng-class="{'cw-visible':chart.displayChart, 'cw-hidden':!chart.displayChart}"></i>
   </div>
@@ -70,7 +70,7 @@
 <!-- display charts -->
 <div class="chart-container" ng-class="{'cw-visible':chart.displayChart, 'cw-hidden':!chart.displayChart}">
   <div class="chart-actions">
-    <div class="chart-action-btn btn-stack-bar-chart btn" ng-if="chart.type=='bar'" ng-click="chart.options.bar.displayStackedBar=!chart.options.bar.displayStackedBar">
+    <div class="chart-action-btn btn-stack-bar-chart btn page-action no-text" ng-if="chart.type=='bar'" ng-click="chart.options.bar.displayStackedBar=!chart.options.bar.displayStackedBar">
       <i class="fa fa-cube"></i>
     </div>
   </div>
