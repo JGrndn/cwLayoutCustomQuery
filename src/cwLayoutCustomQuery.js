@@ -275,7 +275,7 @@
       // layout options
       that.optionsManager.setLayoutOptions(that.options.CustomOptions);
 
-      loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope) {
+      loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope, $sce) {
         $scope.objectId = that.objectId;
         $scope.node = that;
         $scope.templates = {
@@ -339,6 +339,10 @@
           $scope.chart.labels = data.labels;
           $scope.chart.data = data.data;
           $scope.chart.series = data.series;
+        };
+
+        $scope.displayItemString = function(item){
+          return $sce.trustAsHtml(item.displayName);
         };
 
         $scope.applyFilters();

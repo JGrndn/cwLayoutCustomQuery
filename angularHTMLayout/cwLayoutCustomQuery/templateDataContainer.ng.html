@@ -5,7 +5,7 @@
       data-association-key="{{::node.nodeID}}">
       <li ng-repeat="item in items.slice(((pagination.currentPage-1)*pagination.itemsPerPage.value), ((pagination.currentPage)*pagination.itemsPerPage.value))" data-item-name="{{::item.name}}" data-item-id="{{::item.object_id}}" data-item-objecttypescriptname="{{node.mmNode.ObjectTypeScriptName.toLowerCase()}}" class="cw-item {{node.nodeID}} {{node.nodeID}}-{{item.object_id}} ot-{{node.mmNode.ObjectTypeScriptName.toLowerCase()}}">
         <div class="{{::node.nodeID}} ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}">
-          <div ng-bind-html="item.displayName"></div>
+          <div ng-bind-html="displayItemString(item)"></div>
         </div>
       </li>
     </ul>
