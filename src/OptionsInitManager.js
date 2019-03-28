@@ -82,12 +82,12 @@
   }
 
   cwManager.prototype.setLayoutOptions = function (options) {
-    this.initFilters(options['init-filters']);
-    this.initPagination(options['pagination-options']);
-    this.initChart(options['chart-options']);
+    this.setupFilters(options['init-filters']);
+    this.setupPagination(options['pagination-options']);
+    this.setupChart(options['chart-options']);
   };
 
-  cwManager.prototype.initFilters = function(json){
+  cwManager.prototype.setupFilters = function(json){
     try {
       this.initFilters = (json === '') ? [] : JSON.parse(json);
     } catch (err) {
@@ -95,7 +95,7 @@
     }
   };
 
-  cwManager.prototype.initPagination = function(json){
+  cwManager.prototype.setupPagination = function(json){
     try {
       this.paginationOptions = getDefaultPaginationOptions();
       if (json !== '') {
@@ -110,7 +110,7 @@
     }
   };
 
-  cwManager.prototype.initChart = function (json) {
+  cwManager.prototype.setupChart = function (json) {
     var that = this;
     function replaceOptions(tgtItem, srcItem, key) {
       if (srcItem.hasOwnProperty(key)){
