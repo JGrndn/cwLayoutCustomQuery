@@ -36,7 +36,7 @@
     <div class="line-options-container" ng-if="chart.type=='line'">
       <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-series">
         Series :
-        <select ng-model="chart.options.line.series" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])"
+        <select class="custom-query-select" ng-model="chart.options.line.series" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])"
           ng-change="refreshChart()"></select>
       </div>
       <div class="custom-query-chart-options custom-query-line-chart-options custom-query-chart-operation">
