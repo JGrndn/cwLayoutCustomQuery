@@ -1,0 +1,8 @@
+tooltip_axis_radar = 
+tooltip_axis_pie = 
+tooltip_series_pie = 
+tooltip_series_bar = 
+label_custom_chart_type = Type de graphique
+label_custom_chart_series = Séries
+label_custom_chart_axis = Ordonnées
+label_custom_chart_items_found = éléments

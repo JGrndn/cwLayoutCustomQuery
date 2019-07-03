@@ -1,0 +1,8 @@
+tooltip_axis_radar = 
+tooltip_axis_pie = 
+tooltip_series_pie = 
+tooltip_series_bar = 
+label_custom_chart_type = Type of Chart
+label_custom_chart_series = Series
+label_custom_chart_axis = Axis
+label_custom_chart_items_found = items found

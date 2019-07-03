@@ -18,7 +18,7 @@
   };
   
   cwLayout.prototype.matchCriteria = function (item, filters) {
-    var i = 0, filter, propValue, filterValue, pt;
+    let i = 0, filter, propValue, filterValue, pt;
     for (i = 0; i < filters.length; i += 1) {
       filter = filters[i];
       if (filter.property && filter.operator && filter.value != '') {
@@ -58,7 +58,7 @@
 
   cwLayout.prototype.drawAssociations = function (output, associationTitleText, object) {
     /*jslint unparam:true*/
-    var objectId, associationTargetNode, i, child, p;
+    let objectId, associationTargetNode, i, child, p;
     this.domId = 'cwCustomQuery-' + this.nodeID;
 
     if (cwApi.isUndefinedOrNull(object) || cwApi.isUndefined(object.associations)) {
@@ -91,8 +91,10 @@
       this.allItems.push(child);
       this.items.push(child);
     }
-    var cwvisible = this.allItems.length > 0 ? 'cw-visible' : '';
-    output.push('<div id="', this.domId, '" class="cwLayoutCustomQuery ', cwvisible, '"></div>');
+    let cwvisible = this.allItems.length > 0 ? 'cw-visible' : '';
+    output.push('<div id="wrapper-', this.domId, '" class="cwLayoutCustomQuery-wrapper ', cwvisible, '">');
+    output.push('<div id="', this.domId, '" class="cwLayoutCustomQuery"></div>');
+    output.push('</div>');
 
     // metadata
     this.selectedProperties = [];
@@ -103,9 +105,9 @@
       this.propertiesMetaData[p.scriptName] = {};
       switch (p.type) {
         case 'Boolean':
-          this.propertiesMetaData[p.scriptName].type = 'checkbox';
+          this.propertiesMetaData[p.scriptName].type = 'boolean';
           this.propertiesMetaData[p.scriptName].operators = ['=', '!='];
-          this.propertiesMetaData[p.scriptName].values = [{label:$.i18n.prop('global_true'),value:true},{label:$.i18n.prop('global_false'),value:false}];
+          this.propertiesMetaData[p.scriptName].values = [{label:translateText('true'),value:true},{label:translateText('false'),value:false}];
           break;
         case 'Integer':
         case 'Double':
@@ -130,13 +132,15 @@
   };
 
   cwLayout.prototype.getDataForChart = function (items, chart) {
-    switch (chart.type) {
+    switch (chart.type.id) {
       case 'pie':
-        return this.getDataForPieChart(items, chart.options.pie);
+        return this.getDataForPieChart(items, chart.options);
       case 'bar':
-        return this.getDataForBarChart(items, chart.options.bar);
       case 'line':
-        return this.getDataForBarChart(items, chart.options.line);
+      case 'horizontal-bar':
+      case 'stacked-bar':
+      case 'radar':
+        return this.getDataForBarChart(items, chart.options);
       default:
         return {
           labels: [],
@@ -157,7 +161,7 @@
 
   function groupByInArray(arr, prop) {
     return arr.reduce(function (groups, item) {
-      var val = item.properties[prop];
+      let val = item.properties[prop];
       groups[val] = groups[val] || [];
       groups[val].push(item);
       return groups;
@@ -178,11 +182,10 @@
   }
 
   cwLayout.prototype.getDataForBarChart = function (items, opt) {
-    var i, pSeries, pOperand, pAxis, itemsBySeries = {}, itemsByLabels = {}, s, l, res = { data: [], labels: [], series: [] };
-    if (opt.series !== null && opt.pAxis !== null && (opt.operation === 'count' || (opt.operation === 'sum' && opt.pOperation !== null))) {
+    let i, pSeries, pOperand, pAxis, itemsBySeries = {}, itemsByLabels = {}, s, l, res = { data: [], labels: [], series: [] };
+    if (opt.series && opt.pAxis) {
       pSeries = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series);
       pAxis = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pAxis);
-      pOperand = opt.operation === 'sum' ? cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pOperation) : null;
       itemsBySeries = groupByInArray(items, pSeries.scriptName);
       itemsByLabels = groupByInArray(items, pAxis.scriptName);
       if (pSeries.type === 'Lookup') {
@@ -220,7 +223,7 @@
       }
       // now we can get data
       for (s in itemsBySeries) {
-        var _data = [];
+        let _data = [];
         if (itemsBySeries.hasOwnProperty(s) && res.series.indexOf(translateText(s)) === -1) {
           res.series.push(translateText(s));
         }
@@ -228,7 +231,7 @@
           if (itemsByLabels.hasOwnProperty(l) && res.labels.indexOf(translateText(l)) === -1) {
             res.labels.push(translateText(l));
           }
-          var _nb = pOperand === null ? getNumberOfItemsInArray(itemsBySeries[s], pAxis.scriptName, l) : getNumberOfItemsInArray(itemsBySeries[s], pAxis.scriptName, l, pOperand.scriptName);
+          let _nb = getNumberOfItemsInArray(itemsBySeries[s], pAxis.scriptName, l);
           _data.push(_nb);
         }
         res.data.push(_data);
@@ -238,20 +241,19 @@
   };
 
   cwLayout.prototype.getDataForPieChart = function (items, opt) {
-    var p, pOp, data = [], labels = [], series = [];
+    let p, pOp, data = [], labels = [], series = [];
 
-    if (opt.series !== null && (opt.operation === 'count' || (opt.operation === 'sum' && opt.pOperation !== null))) {
+    if (opt.series) {
       p = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series);
-      pOp = opt.operation === 'sum' ? cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pOperation) : null;
       if (p.type === 'Lookup') {
         for (i = 0; i < p.lookups.length; i += 1) {
           labels.push(translateText(p.lookups[i].name));
-          var d = opt.operation === 'count' ? getNumberOfItemsInArray(items, p.scriptName, p.lookups[i].name) : getNumberOfItemsInArray(items, p.scriptName, p.lookups[i].name, pOp.scriptName);
+          let d = getNumberOfItemsInArray(items, p.scriptName, p.lookups[i].name);
           data.push(d);
         }
       } else if (p.type === 'Boolean') {
-        var dTrue = opt.operation === 'count' ? getNumberOfItemsInArray(items, p.scriptName, 'true') : getNumberOfItemsInArray(items, p.scriptName, 'true', pOp.scriptName);
-        var dFalse = opt.operation === 'count' ? getNumberOfItemsInArray(items, p.scriptName, 'false') : getNumberOfItemsInArray(items, p.scriptName, 'false', pOp.scriptName);
+        let dTrue = getNumberOfItemsInArray(items, p.scriptName, 'true');
+        let dFalse = getNumberOfItemsInArray(items, p.scriptName, 'false');
         labels.push(translateText('true'));
         labels.push(translateText('false'));
         data.push(dTrue);
@@ -263,20 +265,17 @@
     };
   };
 
-  
-
   cwLayout.prototype.applyJavaScript = function () {
-    var that = this;
+    let that = this;
     cwApi.CwAsyncLoader.load('angular', function () {
-      var loader = cwApi.CwAngularLoader, templatePath, $container = $('#' + that.domId);
+      let loader = cwApi.CwAngularLoader, templatePath, $container = $('#' + that.domId);
       loader.setup();
       templatePath = that.getTemplatePath('cwLayoutCustomQuery', 'templateCustomQuery');
       
       // layout options
-      that.optionsManager.setLayoutOptions(that.options.CustomOptions);
+      that.optionsManager.init(that.options.CustomOptions);
 
       loader.loadControllerWithTemplate('cwCustomQueryController', $container, templatePath, function ($scope, $sce) {
-        $scope.objectId = that.objectId;
         $scope.node = that;
         $scope.templates = {
           'filterContainer' : that.getTemplatePath('cwLayoutCustomQuery', 'templateFilterContainer'),
@@ -287,19 +286,17 @@
         $scope.selectedProperties = that.selectedProperties;
         $scope.propertiesMetadata = that.propertiesMetaData;
 
-        // pagination
-        $scope.pagination = that.optionsManager.paginationOptions;
-
+        $scope.options = {
+          displayResultList: false,
+          pagination: that.optionsManager.paginationOptions
+        };
         // filters
         $scope.setItemsPerPage = function (num) {
           $scope.itemsPerPage = num;
           $scope.currentPage = 1; //reset to first page
         }
         $scope.displayFilterBox = false;
-        $scope.toggleFilter = function(){
-          $scope.displayFilterBox = !$scope.displayFilterBox;
-        };
-        $scope.filters = that.optionsManager.initFilters; 
+        $scope.filters = that.optionsManager.filters; 
         $scope.addFilter = function (evt) {
           evt.preventDefault();
           $scope.filters.push({});
@@ -314,7 +311,7 @@
         };
         $scope.applyFilters = function(evt){
           if (evt) evt.preventDefault();
-          var i=0, items = [];
+          let i=0, items = [];
           for(i=0; i<that.allItems.length; i+=1){
             if(that.matchCriteria(that.allItems[i], $scope.filters)){
               items.push(that.allItems[i]);
@@ -335,14 +332,66 @@
           };
         };
         $scope.refreshChart = function(){
-          var data = that.getDataForChart($scope.items, $scope.chart);
+          let data = that.getDataForChart($scope.items, $scope.chart);
           $scope.chart.labels = data.labels;
           $scope.chart.data = data.data;
           $scope.chart.series = data.series;
+          that.optionsManager.refreshChartOptions();
+        };
+
+        $scope.getClassChart = function(){
+          return that.optionsManager.getClassChart();
         };
 
         $scope.displayItemString = function(item){
           return $sce.trustAsHtml(item.displayName);
+        };
+        
+        $scope.getTemplatePath = function(filename){
+          return that.getTemplatePath('cwLayoutCustomQuery', filename);
+        };
+        
+        $scope.isAdminUser = function(){
+          if (cwApi.currentUser.PowerLevel === 1){
+            if (cwApi.customLibs && cwApi.customLibs.utils && cwApi.customLibs.utils.copyToClipboard){
+              return true;
+            }
+            return false;
+          }
+          return false;
+        };
+
+        $scope.getSeriesTooltip = function(){
+          switch($scope.chart.type.id){
+            case '':
+              return '';
+            case 'pie':
+              return $.i18n.prop('tooltip_series_pie');
+            default :
+              return $.i18n.prop('tooltip_series_bar');
+          }
+        };
+
+        $scope.getAxisTooltip = function(){
+          switch($scope.chart.type.id){
+            case '':
+            case 'pie':
+              return '';
+            case 'radar':
+              return $.i18n.prop('tooltip_axis_radar');
+            case 'stacked-bar':
+            case 'horizontal-bar':
+            case 'bar':
+            case 'line':
+            default :
+            return $.i18n.prop('tooltip_axis_pie');
+          }
+        };
+
+        $scope.copyToClipboard = function(){
+          let data = that.optionsManager.getConfiguration(); // get configuration (filters + chart options) as json object
+          let str = angular.toJson(data);
+          cwApi.customLibs.utils.copyToClipboard(str);
         };
 
         $scope.applyFilters();
