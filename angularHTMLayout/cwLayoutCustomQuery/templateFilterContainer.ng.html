@@ -12,8 +12,10 @@
         <div ng-if="f.property && propertiesMetadata[f.property].type">
           <input ng-model="f.value" ng-if="propertiesMetadata[f.property].type!=='lookup' && propertiesMetadata[f.property].type!=='boolean'" type="{{propertiesMetadata[f.property].type}}">
           <select ng-model="f.value" ng-if="propertiesMetadata[f.property].type==='lookup'" ng-options="x.name as x.name for x in propertiesMetadata[f.property].lookups"></select>
-          <input ng-model="f.value" ng-if="propertiesMetadata[f.property].type==='boolean'" type="radio" ng-value='true'><span class="label">{{$root.i18n('global_true')}}</span>
-          <input ng-model="f.value" ng-if="propertiesMetadata[f.property].type==='boolean'" type="radio" ng-value='false'><span class="label">{{$root.i18n('global_false')}}</span>
+          <div ng-if="propertiesMetadata[f.property].type==='boolean'">
+            <input ng-model="f.value" type="radio" ng-value='true'><span class="label">{{$root.i18n('global_true')}}</span>
+            <input ng-model="f.value" type="radio" ng-value='false'><span class="label">{{$root.i18n('global_false')}}</span>
+          </div>
         </div>
       </div>
       <div class="remove-filter-button filter-cell">
