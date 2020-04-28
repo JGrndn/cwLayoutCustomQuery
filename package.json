@@ -1,7 +1,7 @@
 {
   "name": "cwLayoutCustomQuery",
   "description": "Allow users to create their own filter and to display data using charts",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "main": "cwLayoutCustomQuery.js",
   "scripts": {
     "test": ""
