@@ -1,9 +1,6 @@
 .cwLayoutCustomQuery-wrapper {
   width: 99%;
 }
-.cwLayoutCustomQuery div.cwPropertiesTableContainer {
-  padding-bottom: 0px;
-}
 .cwLayoutCustomQuery .cwLayoutCustomQuery-details {
   max-width: none;
 }
