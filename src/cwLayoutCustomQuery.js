@@ -1,10 +1,10 @@
 /* Copyright (c) 2012-2016 Casewise Systems Ltd (UK) - All rights reserved */
 
 /*global cwAPI, jQuery, cwConfigurationEditorMapping */
-(function(cwApi, $) {
+(function (cwApi, $) {
   "use strict";
 
-  var cwLayout = function(options, viewSchema) {
+  var cwLayout = function (options, viewSchema) {
     cwApi.extend(this, cwApi.cwLayouts.CwLayout, options, viewSchema);
     this.drawOneMethod = cwApi.cwLayouts.cwLayoutList.drawOne.bind(this);
     cwApi.registerLayoutForJSActions(this);
@@ -13,11 +13,11 @@
     this.trueFalseArray = [translateText("true"), translateText("false")];
   };
 
-  cwLayout.prototype.getTemplatePath = function(folder, templateName) {
+  cwLayout.prototype.getTemplatePath = function (folder, templateName) {
     return cwApi.format("{0}/html/{1}/{2}.ng.html", cwApi.getCommonContentPath(), folder, templateName);
   };
 
-  cwLayout.prototype.matchCriteria = function(item, filters) {
+  cwLayout.prototype.matchCriteria = function (item, filters) {
     let i = 0,
       filter,
       propValue,
@@ -60,7 +60,7 @@
     return true;
   };
 
-  cwLayout.prototype.drawAssociations = function(output, associationTitleText, object) {
+  cwLayout.prototype.drawAssociations = function (output, associationTitleText, object) {
     /*jslint unparam:true*/
     let objectId, associationTargetNode, i, child, p;
     this.domId = "cwCustomQuery-" + this.nodeID;
@@ -111,7 +111,10 @@
         case "Boolean":
           this.propertiesMetaData[p.scriptName].type = "boolean";
           this.propertiesMetaData[p.scriptName].operators = ["=", "!="];
-          this.propertiesMetaData[p.scriptName].values = [{ label: translateText("true"), value: true }, { label: translateText("false"), value: false }];
+          this.propertiesMetaData[p.scriptName].values = [
+            { label: translateText("true"), value: true },
+            { label: translateText("false"), value: false },
+          ];
           break;
         case "Integer":
         case "Double":
@@ -135,7 +138,7 @@
     }
   };
 
-  cwLayout.prototype.getDataForChart = function(items, chart) {
+  cwLayout.prototype.getDataForChart = function (items, chart) {
     switch (chart.type.id) {
       case "pie":
         return this.getDataForPieChart(items, chart.options);
@@ -149,13 +152,13 @@
         return {
           labels: [],
           data: [],
-          series: []
+          series: [],
         };
     }
   };
 
   function getNumberOfItemsInArray(items, p, value, operand) {
-    return items.reduce(function(nb, o) {
+    return items.reduce(function (nb, o) {
       if (o.properties[p] !== null && o.properties[p].toString() === value) {
         return operand ? nb + o.properties[operand] : nb + 1;
       }
@@ -164,7 +167,7 @@
   }
 
   function groupByInArray(arr, prop) {
-    return arr.reduce(function(groups, item) {
+    return arr.reduce(function (groups, item) {
       let val = item.properties[prop];
       groups[val] = groups[val] || [];
       groups[val].push(item);
@@ -185,7 +188,7 @@
     }
   }
 
-  cwLayout.prototype.getDataForBarChart = function(items, opt) {
+  cwLayout.prototype.getDataForBarChart = function (items, opt) {
     let i,
       pSeries,
       pOperand,
@@ -252,7 +255,7 @@
     return res;
   };
 
-  cwLayout.prototype.getDataForPieChart = function(items, opt) {
+  cwLayout.prototype.getDataForPieChart = function (items, opt) {
     let p,
       pOp,
       data = [],
@@ -279,13 +282,13 @@
     return {
       labels: labels,
       data: data,
-      series: series
+      series: series,
     };
   };
 
-  cwLayout.prototype.applyJavaScript = function() {
+  cwLayout.prototype.applyJavaScript = function () {
     let that = this;
-    cwApi.CwAsyncLoader.load("angular", function() {
+    cwApi.CwAsyncLoader.load("angular", function () {
       let loader = cwApi.CwAngularLoader,
         templatePath,
         $container = $("#" + that.domId);
@@ -295,41 +298,41 @@
       // layout options
       that.optionsManager.init(that.options.CustomOptions);
 
-      loader.loadControllerWithTemplate("cwCustomQueryController", $container, templatePath, function($scope, $sce) {
+      loader.loadControllerWithTemplate("cwCustomQueryController", $container, templatePath, function ($scope, $sce) {
         $scope.node = that;
         $scope.templates = {
           filterContainer: that.getTemplatePath("cwLayoutCustomQuery", "templateFilterContainer"),
           dataContainer: that.getTemplatePath("cwLayoutCustomQuery", "templateDataContainer"),
-          chartContainer: that.getTemplatePath("cwLayoutCustomQuery", "templateChartContainer")
+          chartContainer: that.getTemplatePath("cwLayoutCustomQuery", "templateChartContainer"),
         };
         $scope.items = that.items;
         $scope.selectedProperties = that.selectedProperties;
         $scope.propertiesMetadata = that.propertiesMetaData;
 
         $scope.options = {
-          displayResultList: false,
-          pagination: that.optionsManager.paginationOptions
+          displayResultList: that.optionsManager.displayResultList,
+          pagination: that.optionsManager.paginationOptions,
         };
         // filters
-        $scope.setItemsPerPage = function(num) {
+        $scope.setItemsPerPage = function (num) {
           $scope.itemsPerPage = num;
           $scope.currentPage = 1; //reset to first page
         };
         $scope.displayFilterBox = false;
         $scope.filters = that.optionsManager.filters;
-        $scope.addFilter = function(evt) {
+        $scope.addFilter = function (evt) {
           evt.preventDefault();
           $scope.filters.push({});
         };
-        $scope.removeFilter = function(evt, index) {
+        $scope.removeFilter = function (evt, index) {
           evt.preventDefault();
           $scope.filters.splice(index, 1);
         };
-        $scope.resetFilter = function(filter) {
+        $scope.resetFilter = function (filter) {
           filter.operator = "";
           filter.value = "";
         };
-        $scope.applyFilters = function(evt) {
+        $scope.applyFilters = function (evt) {
           if (evt) evt.preventDefault();
           let i = 0,
             items = [];
@@ -344,15 +347,15 @@
         // charts
         $scope.chart = that.optionsManager.chartOptions;
 
-        $scope.filterProperties = function(lstType) {
-          return function(item) {
+        $scope.filterProperties = function (lstType) {
+          return function (item) {
             if (lstType.indexOf(item.type) !== -1) {
               return true;
             }
             return false;
           };
         };
-        $scope.refreshChart = function() {
+        $scope.refreshChart = function () {
           let data = that.getDataForChart($scope.items, $scope.chart);
           $scope.chart.labels = data.labels;
           $scope.chart.data = data.data;
@@ -360,19 +363,19 @@
           that.optionsManager.refreshChartOptions();
         };
 
-        $scope.getClassChart = function() {
+        $scope.getClassChart = function () {
           return that.optionsManager.getClassChart();
         };
 
-        $scope.displayItemString = function(item) {
+        $scope.displayItemString = function (item) {
           return $sce.trustAsHtml(item.displayName);
         };
 
-        $scope.getTemplatePath = function(filename) {
+        $scope.getTemplatePath = function (filename) {
           return that.getTemplatePath("cwLayoutCustomQuery", filename);
         };
 
-        $scope.isAdminUser = function() {
+        $scope.isAdminUser = function () {
           if (cwApi.currentUser.PowerLevel === 1) {
             if (cwApi.customLibs && cwApi.customLibs.utils && cwApi.customLibs.utils.copyToClipboard) {
               return true;
@@ -382,7 +385,7 @@
           return false;
         };
 
-        $scope.getSeriesTooltip = function() {
+        $scope.getSeriesTooltip = function () {
           switch ($scope.chart.type.id) {
             case "":
               return "";
@@ -393,7 +396,7 @@
           }
         };
 
-        $scope.getAxisTooltip = function() {
+        $scope.getAxisTooltip = function () {
           switch ($scope.chart.type.id) {
             case "":
             case "pie":
@@ -409,8 +412,9 @@
           }
         };
 
-        $scope.copyToClipboard = function() {
+        $scope.copyToClipboard = function () {
           let data = that.optionsManager.getConfiguration(); // get configuration (filters + chart options) as json object
+          data.displayResultList = $scope.options.displayResultList;
           let str = angular.toJson(data);
           cwApi.customLibs.utils.copyToClipboard(str);
         };
@@ -420,32 +424,41 @@
     });
   };
 
-  cwApi.CwAngularLoader.__proto__.setup = function() {
+  cwApi.CwAngularLoader.__proto__.setup = function () {
     if (this.app !== undefined) {
       return;
     }
     /*jslint browser:true*/
     var cwAppName = cwApi.CwAngularLoaderHelper.appName,
       app;
-    app = angular.module(cwAppName, ["ngDraggable", "cfp.hotkeys", "localytics.directives", "ngSanitize", "ngAnimate", "xeditable", "ui.bootstrap", "chart.js"]);
-    app.config(function($controllerProvider, $compileProvider, hotkeysProvider) {
+    app = angular.module(cwAppName, [
+      "ngDraggable",
+      "cfp.hotkeys",
+      "localytics.directives",
+      "ngSanitize",
+      "ngAnimate",
+      "xeditable",
+      "ui.bootstrap",
+      "chart.js",
+    ]);
+    app.config(function ($controllerProvider, $compileProvider, hotkeysProvider) {
       app.register = {
         controller: $controllerProvider.register,
-        directive: $compileProvider.directive
+        directive: $compileProvider.directive,
       };
       hotkeysProvider.includeCheatSheet = false;
     });
-    app.filter("highlight", function($sce) {
-      return function(text, phrase) {
+    app.filter("highlight", function ($sce) {
+      return function (text, phrase) {
         if (phrase) {
           text = text.replace(new RegExp("(" + phrase + ")", "gi"), '<span class="cw-de-highlighted">$1</span>');
         }
         return $sce.trustAsHtml(text);
       };
     });
-    app.run(function($rootScope) {
+    app.run(function ($rootScope) {
       $rootScope.cwds = cwApi.CwDataServicesApi;
-      $rootScope.i18n = function() {
+      $rootScope.i18n = function () {
         return $.i18n.prop.apply(null, arguments);
       };
       $rootScope.cwApi = cwApi;
@@ -454,10 +467,10 @@
     angular.bootstrap(document, [cwAppName]);
     this.app = app;
 
-    cwApi.ngDirectives.forEach(function(directive) {
+    cwApi.ngDirectives.forEach(function (directive) {
       directive();
     });
   };
-  
+
   cwApi.cwLayouts.cwLayoutCustomQuery = cwLayout;
 })(cwAPI, jQuery);

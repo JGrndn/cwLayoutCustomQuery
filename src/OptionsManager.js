@@ -46,6 +46,7 @@
         let o = JSON.parse(options["init-options"]);
         this.filters = o.filters;
         this.setupChart(o.chartOptions);
+        this.displayResultList = o.displayResultList;
       }
     } catch (err) {}
   };
