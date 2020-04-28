@@ -19,12 +19,11 @@
             <div class="btn page-action no-text list-icon icon" ng-if="isAdminUser()" ng-click="copyToClipboard()">
               <i class="fa fa-clipboard"></i>
             </div>
-            </div>
+          </div>
         </div>
       </li>
       <li class="{{::node.nodeID}}-filter-container property-title filter-container" ng-if="displayFilterBox" ng-include="templates.filterContainer"></li>
-      <li id="{{::node.nodeID}}-{{::objectId}}-value" class="property-details property-value {{::node.nodeID}}-details {{::node.nodeID}}-value" ng-include="templates.dataContainer">
-      </li>
+      <li id="{{::node.nodeID}}-{{::objectId}}-value" class="property-details property-value {{::node.nodeID}}-details {{::node.nodeID}}-value" ng-include="templates.dataContainer"></li>
     </ul>
   </div>
 </div>

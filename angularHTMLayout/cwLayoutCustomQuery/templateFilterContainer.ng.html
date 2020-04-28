@@ -2,19 +2,20 @@
   <div class="cell-content-wrapper filter-wrapper cwPropertiesTableContainer">
     <div class="filter-row filter-content" ng-repeat="f in filters">
       <div class="filter-property-scriptname filter-cell">
-        <select ng-model="f.property" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'"
-          ng-change="resetFilter(f)"></select>
+        <select ng-model="f.property" ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'" ng-change="resetFilter(f)"></select>
       </div>
       <div class="filter-operator filter-cell">
         <select ng-model="f.operator" ng-if="f.property && propertiesMetadata[f.property].type" ng-options="x for x in propertiesMetadata[f.property].operators"></select>
       </div>
       <div class="filter-value filter-cell">
         <div ng-if="f.property && propertiesMetadata[f.property].type">
-          <input ng-model="f.value" ng-if="propertiesMetadata[f.property].type!=='lookup' && propertiesMetadata[f.property].type!=='boolean'" type="{{propertiesMetadata[f.property].type}}">
+          <div><input ng-model="f.value" ng-if="propertiesMetadata[f.property].type!=='lookup' && propertiesMetadata[f.property].type!=='boolean'" type="{{propertiesMetadata[f.property].type}}" /></div>
           <select ng-model="f.value" ng-if="propertiesMetadata[f.property].type==='lookup'" ng-options="x.name as x.name for x in propertiesMetadata[f.property].lookups"></select>
           <div ng-if="propertiesMetadata[f.property].type==='boolean'">
-            <input ng-model="f.value" type="radio" ng-value='true'><span class="label">{{$root.i18n('global_true')}}</span>
-            <input ng-model="f.value" type="radio" ng-value='false'><span class="label">{{$root.i18n('global_false')}}</span>
+            <input ng-model="f.value" type="radio" ng-value="true" />
+            <span class="label">{{$root.i18n('global_true')}}</span>
+            <input ng-model="f.value" type="radio" ng-value="false" />
+            <span class="label">{{$root.i18n('global_false')}}</span>
           </div>
         </div>
       </div>
