@@ -1,3 +1,6 @@
+@import "../../_mixins";
+@import "../../_variables";
+
 .cwLayoutCustomQuery-wrapper {
   width: 99%;
 }
@@ -28,6 +31,12 @@
     }
   }
 
+  .btn.page-action.icon {
+    color: @cwColor1Tint;
+  }
+  .btn.page-action.icon.icon-activated {
+    color: @cwColor1;
+  }
   select.custom-query-viewby {
     width: initial;
   }

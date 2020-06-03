@@ -1,3 +1,30 @@
+/* CUSTOM VARIABLES */
+/* GLOBAL */
+/* LOGIN */
+/* DIAGRAM */
+/* HOME PAGE */
+/* MENU LEFT */
+/* MAIN MENU */
+/* SUB MENU */
+/* PAGE TAB */
+/* DROPDOWN NOTIFICATIONS */
+/* SOCIAL */
+/* LIST BOX */
+/* PROPERTIES GROUP */
+/* BUTTONS */
+/* PAGE ACTIONS */
+/* ACCORDIONS */
+/* DISCUSSIONS */
+/* WORLD MAP */
+/* USER ZONE */
+/* POPUP */
+/* BADGES */
+/* TASKS & NOTIFICATIONS */
+/* GLOBAL SEARCH */
+/* TOP BAR */
+/* DIAGRAM TILE */
+/* MATRIX ADVANCED */
+/* DIAGRAM OVERLAY */
 .cwLayoutCustomQuery-wrapper {
   width: 99%;
 }
@@ -24,6 +51,12 @@
 }
 .cwLayoutCustomQuery li.filter-container .filter-value span.label {
   margin-right: 5px;
+}
+.cwLayoutCustomQuery .btn.page-action.icon {
+  background-color: #5c5d61;
+}
+.cwLayoutCustomQuery .btn.page-action.icon.icon-activated {
+  background-color: #03a0ce;
 }
 .cwLayoutCustomQuery select.custom-query-viewby {
   width: initial;
