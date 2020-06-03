@@ -145,6 +145,7 @@
       case "bar":
       case "line":
       case "horizontal-bar":
+      case "horizontal-stack-bar":
       case "stacked-bar":
       case "radar":
         return this.getDataForBarChart(items, chart.options);
@@ -157,13 +158,13 @@
     }
   };
 
-  function getNumberOfItemsInArray(items, p, value, operand) {
-    return items.reduce(function (nb, o) {
+  function filterItemWithPropertyValue(self, items, p, value, operand) {
+    return items.filter(function (o) {
       if (o.properties[p] !== null && o.properties[p].toString() === value) {
-        return operand ? nb + o.properties[operand] : nb + 1;
+        return true;
       }
-      return nb;
-    }, 0);
+      return false;
+    });
   }
 
   function groupByInArray(arr, prop) {
@@ -198,6 +199,8 @@
       s,
       l,
       res = { data: [], labels: [], series: [] };
+
+    this.data = {};
     if (opt.series && opt.pAxis) {
       pSeries = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series);
       pAxis = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.pAxis);
@@ -246,8 +249,9 @@
           if (itemsByLabels.hasOwnProperty(l) && res.labels.indexOf(translateText(l)) === -1) {
             res.labels.push(translateText(l));
           }
-          let _nb = getNumberOfItemsInArray(itemsBySeries[s], pAxis.scriptName, l);
-          _data.push(_nb);
+          let _r = filterItemWithPropertyValue(this, itemsBySeries[s], pAxis.scriptName, l);
+          this.itemsBySeriesAndLabels[translateText(s) + "_" + translateText(l)] = _r;
+          _data.push(_r.length);
         }
         res.data.push(_data);
       }
@@ -267,16 +271,19 @@
       if (p.type === "Lookup") {
         for (i = 0; i < p.lookups.length; i += 1) {
           labels.push(translateText(p.lookups[i].name));
-          let d = getNumberOfItemsInArray(items, p.scriptName, p.lookups[i].name);
-          data.push(d);
+          let d = filterItemWithPropertyValue(this, items, p.scriptName, p.lookups[i].name);
+          this.itemsBySeriesAndLabels[undefined + "_" + translateText(p.lookups[i].name)] = d;
+          data.push(d.length);
         }
       } else if (p.type === "Boolean") {
-        let dTrue = getNumberOfItemsInArray(items, p.scriptName, "true");
-        let dFalse = getNumberOfItemsInArray(items, p.scriptName, "false");
+        let dTrue = filterItemWithPropertyValue(this, items, p.scriptName, "true");
+        this.itemsBySeriesAndLabels["undefined_" + translateText("true")] = dTrue;
+        let dFalse = filterItemWithPropertyValue(this, items, p.scriptName, "false");
+        this.itemsBySeriesAndLabels["undefined_" + translateText("false")] = dFalse;
         labels.push(translateText("true"));
         labels.push(translateText("false"));
-        data.push(dTrue);
-        data.push(dFalse);
+        data.push(dTrue.length);
+        data.push(dFalse.length);
       }
     }
     return {
@@ -356,7 +363,9 @@
           };
         };
         $scope.refreshChart = function () {
+          that.itemsBySeriesAndLabels = {};
           let data = that.getDataForChart($scope.items, $scope.chart);
+          that.optionsManager.itemsBySeriesAndLabels = that.itemsBySeriesAndLabels;
           $scope.chart.labels = data.labels;
           $scope.chart.data = data.data;
           $scope.chart.series = data.series;
