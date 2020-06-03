@@ -54,7 +54,7 @@
               let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
               let that = this;
               if (data.datasets[tooltipItem.datasetIndex].label) {
-                data.datasets.map((d, index) => {
+                data.datasets.map(function (d, index) {
                   if (that._chart.isDatasetVisible(index)) sum += d.data[tooltipItem.index];
                 });
               } else {

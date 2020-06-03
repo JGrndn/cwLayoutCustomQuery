@@ -65,6 +65,11 @@
     let objectId, associationTargetNode, i, child, p;
     this.domId = "cwCustomQuery-" + this.nodeID;
 
+    if (cwApi.customLibs.utils === undefined || cwAPI.customLibs.utils.version === undefined || cwAPI.customLibs.utils.version < 2.3) {
+      output.push("<h2> Please Install Utils library 2.3 or higher</h2>");
+      return;
+    }
+
     if (cwApi.isUndefinedOrNull(object) || cwApi.isUndefined(object.associations)) {
       // Is a creation page therefore a real object does not exist
       if (!cwApi.isUndefined(this.mmNode.AssociationsTargetObjectTypes[this.nodeID])) {
