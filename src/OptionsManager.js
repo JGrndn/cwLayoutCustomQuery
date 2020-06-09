@@ -53,7 +53,15 @@
                 percentage = 0;
               let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
               let that = this;
-              if (data.datasets[tooltipItem.datasetIndex].label) {
+
+              if (that._chart.config.options.pAxis === that._chart.config.options.series && that._chart.config.type != "pie") {
+                // bar chart with the same pAxis and series
+                data.datasets.forEach(function (d, index) {
+                  sum += d.data[index];
+                });
+
+                value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.datasetIndex];
+              } else if (data.datasets[tooltipItem.datasetIndex].label) {
                 data.datasets.map(function (d, index) {
                   if (that._chart.isDatasetVisible(index)) sum += d.data[tooltipItem.index];
                 });
