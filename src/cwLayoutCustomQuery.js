@@ -9,7 +9,7 @@
     this.drawOneMethod = cwApi.cwLayouts.cwLayoutList.drawOne.bind(this);
     cwApi.registerLayoutForJSActions(this);
     this.optionsManager = new cwApi.cwLayouts.cwLayoutCustomQuery.optionsManager();
-    this.defaultColor = ["#803690", "#00ADF9", "#DCDCDC", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"];
+    this.defaultColor = ["#F66D44", "#FEAE65", "#E6F69D", "#AADEA7", "#64C2A6", "#2D87BB", "#003F5C", "#58508D", "#BC5090", "#FF6361", "#FFA600"];
     this.trueFalseArray = [translateText("true"), translateText("false")];
   };
 
