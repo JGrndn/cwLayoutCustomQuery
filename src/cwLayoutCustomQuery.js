@@ -9,7 +9,7 @@
     this.drawOneMethod = cwApi.cwLayouts.cwLayoutList.drawOne.bind(this);
     cwApi.registerLayoutForJSActions(this);
     this.optionsManager = new cwApi.cwLayouts.cwLayoutCustomQuery.optionsManager();
-
+    this.defaultColor = ["#803690", "#00ADF9", "#DCDCDC", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"];
     this.trueFalseArray = [translateText("true"), translateText("false")];
   };
 
@@ -68,6 +68,14 @@
     if (cwApi.customLibs.utils === undefined || cwAPI.customLibs.utils.version === undefined || cwAPI.customLibs.utils.version < 2.3) {
       output.push("<h2> Please Install Utils library 2.3 or higher</h2>");
       return;
+    }
+    if (cwAPI.customLibs.utils && cwAPI.customLibs.utils.getCustomLayoutConfiguration) {
+      this.propConfig = cwAPI.customLibs.utils.getCustomLayoutConfiguration("property");
+      if (this.propConfig && this.propConfig[this.mmNode.ObjectTypeScriptName.toLowerCase()]) {
+        this.propConfig = this.propConfig[this.mmNode.ObjectTypeScriptName.toLowerCase()];
+      } else {
+        this.propConfig = undefined;
+      }
     }
 
     if (cwApi.isUndefinedOrNull(object) || cwApi.isUndefined(object.associations)) {
@@ -203,7 +211,10 @@
       itemsByLabels = {},
       s,
       l,
-      res = { data: [], labels: [], series: [] };
+      self = this,
+      itemsByLabelsSorted = {},
+      itemsBySeriesSorted = {},
+      res = { data: [], labels: [], series: [], colours: [] };
 
     this.data = {};
     if (opt.series && opt.pAxis) {
@@ -217,6 +228,22 @@
           if (!itemsBySeries.hasOwnProperty(pSeries.lookups[i].name)) {
             itemsBySeries[pSeries.lookups[i].name] = [];
           }
+          itemsBySeriesSorted[pSeries.lookups[i].name] = itemsBySeries[pSeries.lookups[i].name];
+        }
+        itemsBySeries = itemsBySeriesSorted;
+        if (this.propConfig && this.propConfig[opt.series]) {
+          res.colours = Object.keys(itemsBySeries).map(function (ln, index) {
+            let id;
+            pSeries.lookups.some(function (l) {
+              id = l.id;
+              return l.name == ln;
+            });
+            if (self.propConfig[opt.series][id]) {
+              if (self.propConfig[opt.series][id].iconColor) return self.propConfig[opt.series][id].iconColor;
+              if (self.propConfig[opt.series][id].valueColor) return self.propConfig[opt.series][id].valueColor;
+            }
+            return self.defaultColor[index];
+          });
         }
       } else if (pSeries.type === "Boolean") {
         itemsBySeries = groupByInArray(items, pSeries.scriptName);
@@ -228,14 +255,31 @@
         if (!itemsBySeries.hasOwnProperty("false")) {
           itemsBySeries["false"] = [];
         }
+        itemsBySeriesSorted.true = itemsBySeries.true;
+        itemsBySeriesSorted.false = itemsBySeries.false;
+
+        itemsBySeries = itemsBySeriesSorted;
+        res.colours = Object.keys(itemsBySeries).map(function (l) {
+          return l == "false" ? "#DD1111" : "#11DD11";
+        });
+      } else {
+        Object.keys(itemsBySeries)
+          .sort()
+          .forEach(function (i) {
+            itemsBySeriesSorted[i] = itemsBySeries[i];
+          });
+        itemsBySeriesSorted = itemsBySeries;
       }
+
       // some values might be missing in labels as well
       if (pAxis.type === "Lookup") {
         for (i = 0; i < pAxis.lookups.length; i += 1) {
           if (!itemsByLabels.hasOwnProperty(pAxis.lookups[i].name)) {
             itemsByLabels[pAxis.lookups[i].name] = [];
           }
+          itemsByLabelsSorted[pAxis.lookups[i].name] = itemsByLabels[pAxis.lookups[i].name];
         }
+        itemsByLabels = itemsByLabelsSorted;
       } else if (pAxis.type === "Boolean") {
         if (!itemsByLabels.hasOwnProperty("true")) {
           itemsByLabels["true"] = [];
@@ -243,6 +287,15 @@
         if (!itemsByLabels.hasOwnProperty("false")) {
           itemsByLabels["false"] = [];
         }
+        itemsByLabelsSorted.true = itemsByLabels.true;
+        itemsByLabelsSorted.false = itemsByLabels.false;
+      } else {
+        Object.keys(itemsByLabels)
+          .sort()
+          .forEach(function (i) {
+            itemsByLabelsSorted[i] = itemsByLabels[i];
+          });
+        itemsByLabels = itemsByLabelsSorted;
       }
       // now we can get data
       for (s in itemsBySeries) {
@@ -261,7 +314,12 @@
         res.data.push(_data);
       }
     }
+    res.colours = res.colours.map(this.getColors);
     return res;
+  };
+
+  cwLayout.prototype.getColors = function (color) {
+    return color;
   };
 
   cwLayout.prototype.getDataForPieChart = function (items, opt) {
@@ -269,7 +327,8 @@
       pOp,
       data = [],
       labels = [],
-      series = [];
+      series = [],
+      colours = [];
 
     if (opt.series) {
       p = cwApi.mm.getProperty(this.mmNode.ObjectTypeScriptName, opt.series);
@@ -279,6 +338,11 @@
           let d = filterItemWithPropertyValue(this, items, p.scriptName, p.lookups[i].name);
           this.itemsBySeriesAndLabels[undefined + "_" + translateText(p.lookups[i].name)] = d;
           data.push(d.length);
+
+          if (this.propConfig[opt.series][p.lookups[i].id]) {
+            if (this.propConfig[opt.series][p.lookups[i].id].iconColor) colours.push(this.propConfig[opt.series][p.lookups[i].id].iconColor);
+            else if (this.propConfig[opt.series][p.lookups[i].id].valueColor) colours.push(this.propConfig[opt.series][p.lookups[i].id].valueColor);
+          } else colours.push(this.defaultColor[i]);
         }
       } else if (p.type === "Boolean") {
         let dTrue = filterItemWithPropertyValue(this, items, p.scriptName, "true");
@@ -295,6 +359,7 @@
       labels: labels,
       data: data,
       series: series,
+      colours: colours,
     };
   };
 
@@ -374,6 +439,7 @@
           $scope.chart.labels = data.labels;
           $scope.chart.data = data.data;
           $scope.chart.series = data.series;
+          $scope.chart.colours = data.colours;
           that.optionsManager.refreshChartOptions();
         };
 
