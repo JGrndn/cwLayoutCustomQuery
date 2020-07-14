@@ -339,7 +339,7 @@
           this.itemsBySeriesAndLabels[undefined + "_" + translateText(p.lookups[i].name)] = d;
           data.push(d.length);
 
-          if (this.propConfig[opt.series][p.lookups[i].id]) {
+          if (this.propConfig && this.propConfig[opt.series] && this.propConfig[opt.series][p.lookups[i].id]) {
             if (this.propConfig[opt.series][p.lookups[i].id].iconColor) colours.push(this.propConfig[opt.series][p.lookups[i].id].iconColor);
             else if (this.propConfig[opt.series][p.lookups[i].id].valueColor) colours.push(this.propConfig[opt.series][p.lookups[i].id].valueColor);
           } else colours.push(this.defaultColor[i]);
