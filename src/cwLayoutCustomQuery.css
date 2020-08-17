@@ -53,10 +53,10 @@
   margin-right: 5px;
 }
 .cwLayoutCustomQuery .btn.page-action.icon {
-  background-color: #5c5d61;
+  color: #5c5d61;
 }
 .cwLayoutCustomQuery .btn.page-action.icon.icon-activated {
-  background-color: #03a0ce;
+  color: #03a0ce;
 }
 .cwLayoutCustomQuery select.custom-query-viewby {
   width: initial;
@@ -82,4 +82,7 @@
 }
 .cwLayoutCustomQuery div.custom-query-result-chart div.display-chart-option div.chart-options-container {
   width: 100%;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .htmlbox-header.property-details {
+  display: none;
 }
