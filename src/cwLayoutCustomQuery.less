@@ -47,6 +47,7 @@
       margin: 0;
     }
   }
+
   div.custom-query-result-chart {
     width: 80%;
     .cwPropertiesTableContainer select {
@@ -66,8 +67,40 @@
 
 .homePage_evolveView {
   .cwLayoutCustomQuery-wrapper {
-    .htmlbox-header.property-details {
-      display: none;
+    height: inherit;
+    .htmlbox-header.property-details,
+    .display-chart-option {
+      display: none !important;
+    }
+    .custom-query-result-container {
+      height: inherit;
+    }
+    .custom-query-result-chart {
+      height: inherit;
+    }
+    .property-details {
+      height: inherit;
+    }
+    .htmlbox-container {
+      height: inherit;
+    }
+    .chart,
+    .chart-container,
+    .cwLayoutCustomQuery-details,
+    .cwLayoutCustomQuery,
+    .cwLayoutCustomQuery > .ng-scope {
+      height: inherit;
+      width: 100%;
+    }
+    .cwLayoutCustomQuery div.custom-query-result-chart {
+      width: 100%;
+    }
+
+    ul.property-details li.property-details,
+    div.property-box-asso {
+      border: 0px;
+      padding: 0px;
+      margin: 0px;
     }
   }
 }

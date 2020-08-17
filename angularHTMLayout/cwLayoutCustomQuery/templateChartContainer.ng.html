@@ -25,7 +25,7 @@
   </div>
 </div>
 <!-- display charts -->
-<div class="chart-container cw-visible" ng-if="chart">
+<div id="canvasWrapper" ng-style="getStyleForChart()" class="chart-container cw-visible" ng-if="chart">
   <canvas
     ng-if="chart.type.id === 'horizontal-bar' || chart.type.id === 'horizontal-stack-bar'"
     class="chart chart-horizontal-bar"

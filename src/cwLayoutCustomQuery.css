@@ -83,6 +83,39 @@
 .cwLayoutCustomQuery div.custom-query-result-chart div.display-chart-option div.chart-options-container {
   width: 100%;
 }
-.homePage_evolveView .cwLayoutCustomQuery-wrapper .htmlbox-header.property-details {
-  display: none;
+.homePage_evolveView .cwLayoutCustomQuery-wrapper {
+  height: inherit;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .htmlbox-header.property-details,
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .display-chart-option {
+  display: none !important;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .custom-query-result-container {
+  height: inherit;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .custom-query-result-chart {
+  height: inherit;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .property-details {
+  height: inherit;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .htmlbox-container {
+  height: inherit;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .chart,
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .chart-container,
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .cwLayoutCustomQuery-details,
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .cwLayoutCustomQuery,
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .cwLayoutCustomQuery > .ng-scope {
+  height: inherit;
+  width: 100%;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper .cwLayoutCustomQuery div.custom-query-result-chart {
+  width: 100%;
+}
+.homePage_evolveView .cwLayoutCustomQuery-wrapper ul.property-details li.property-details,
+.homePage_evolveView .cwLayoutCustomQuery-wrapper div.property-box-asso {
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
 }

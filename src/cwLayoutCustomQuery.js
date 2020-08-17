@@ -492,6 +492,17 @@
           }
         };
 
+        $scope.getStyleForChart = function () {
+          let canvaContainer = document.querySelector("#" + that.domId + " .chart-container ");
+          let checkIfInaDisplay = document.querySelector(".homePage_evolveView  #" + that.domId + " .chart-container ");
+
+          if (canvaContainer && !checkIfInaDisplay) {
+            let h = window.innerHeight - canvaContainer.getBoundingClientRect().y - 100;
+            h = h + "px";
+            return { height: h };
+          }
+        };
+
         $scope.copyToClipboard = function () {
           let data = that.optionsManager.getConfiguration(); // get configuration (filters + chart options) as json object
           data.displayResultList = $scope.options.displayResultList;
