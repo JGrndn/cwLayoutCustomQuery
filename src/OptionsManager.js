@@ -35,6 +35,8 @@
       labels: [],
       series: [],
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         onClick: function (event, array) {
           let element = this.getElementAtEvent(event);
           if (element.length > 0) {
@@ -56,11 +58,17 @@
 
               if (that._chart.config.options.pAxis === that._chart.config.options.series && that._chart.config.type != "pie") {
                 // bar chart with the same pAxis and series
-                data.datasets.forEach(function (d, index) {
-                  sum += d.data[index];
+                let indexMap = {};
+                data.labels.forEach(function (l, index) {
+                  data.datasets.forEach(function (d, i) {
+                    if (l === d.label) {
+                      sum += d.data[index];
+                      indexMap[index] = i;
+                    }
+                  });
                 });
 
-                value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.datasetIndex];
+                value = data.datasets[tooltipItem.datasetIndex].data[indexMap[tooltipItem.datasetIndex]];
               } else if (data.datasets[tooltipItem.datasetIndex].label) {
                 data.datasets.map(function (d, index) {
                   if (that._chart.isDatasetVisible(index)) sum += d.data[tooltipItem.index];
@@ -115,6 +123,7 @@
   cwManager.prototype.setupChart = function (data) {
     try {
       this.chartOptions.displaySettings = data.displaySettings;
+
       let type,
         self = this;
       this.chartOptions.availableCharts.some(function (item) {
