@@ -17,6 +17,11 @@
     return cwApi.format("{0}/html/{1}/{2}.ng.html", cwApi.getCommonContentPath(), folder, templateName);
   };
 
+  cwLayout.prototype.copyToClipboardGraph = function () {
+    let canvas = document.querySelector("#" + this.domId + " .chart.chart-base");
+    cwAPI.customLibs.utils.copyCanvasToClipboard(canvas);
+  };
+
   cwLayout.prototype.matchCriteria = function (item, filters) {
     let i = 0,
       filter,
@@ -508,6 +513,10 @@
           data.displayResultList = $scope.options.displayResultList;
           let str = angular.toJson(data);
           cwApi.customLibs.utils.copyToClipboard(str);
+        };
+
+        $scope.copyToClipboardGraph = function () {
+          that.copyToClipboardGraph();
         };
 
         $scope.applyFilters();

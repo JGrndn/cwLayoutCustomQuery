@@ -35,6 +35,9 @@
             >
               <i class="icon fa" ng-class="{'fa-chevron-left':options.displayResultList, 'fa-chevron-right':!options.displayResultList}"></i>
             </div>
+            <div class="btn page-action no-text list-icon icon icon-activated" ng-click="copyToClipboardGraph()">
+              <i class="fa fa-files-o"></i>
+            </div>
             <div class="btn page-action no-text list-icon icon icon-activated" ng-if="isAdminUser()" ng-click="copyToClipboard()">
               <i class="fa fa-clipboard"></i>
             </div>
