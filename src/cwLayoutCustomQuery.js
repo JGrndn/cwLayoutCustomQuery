@@ -18,7 +18,7 @@
   };
 
   cwLayout.prototype.copyToClipboardGraph = function () {
-    let canvas = document.querySelector("#" + this.domId + " .chart.chart-base");
+    let canvas = document.querySelector("#" + this.domId + " canvas.chart");
     cwAPI.customLibs.utils.copyCanvasToClipboard(canvas);
   };
 
