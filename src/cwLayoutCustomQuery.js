@@ -70,8 +70,8 @@
     let objectId, associationTargetNode, i, child, p;
     this.domId = "cwCustomQuery-" + this.nodeID;
 
-    if (cwApi.customLibs.utils === undefined || cwAPI.customLibs.utils.version === undefined || cwAPI.customLibs.utils.version < 2.3) {
-      output.push("<h2> Please Install Utils library 2.3 or higher</h2>");
+    if (cwApi.customLibs.utils === undefined || cwAPI.customLibs.utils.version === undefined || cwAPI.customLibs.utils.version < 2.5) {
+      output.push("<h2> Please Install Utils library 2.5 or higher</h2>");
       return;
     }
     if (cwAPI.customLibs.utils && cwAPI.customLibs.utils.getCustomLayoutConfiguration) {
