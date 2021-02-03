@@ -68,7 +68,7 @@
   cwLayout.prototype.drawAssociations = function (output, associationTitleText, object) {
     /*jslint unparam:true*/
     let objectId, associationTargetNode, i, child, p;
-    this.domId = "cwCustomQuery-" + this.nodeID;
+    this.domId = "cwLayoutCustomQuery-" + this.nodeID;
 
     if (cwApi.customLibs.utils === undefined || cwAPI.customLibs.utils.version === undefined || cwAPI.customLibs.utils.version < 2.5) {
       output.push("<h2> Please Install Utils library 2.5 or higher</h2>");
@@ -114,9 +114,7 @@
       this.items.push(child);
     }
     let cwvisible = this.allItems.length > 0 ? "cw-visible" : "";
-    output.push('<div id="wrapper-', this.domId, '" class="cwLayoutCustomQuery-wrapper ', cwvisible, '">');
-    output.push('<div id="', this.domId, '" class="cwLayoutCustomQuery"></div>');
-    output.push("</div>");
+    output.push('<div id="', this.domId, '" class="cwLayoutCustomQuery" ', cwvisible, "></div>");
 
     // metadata
     this.selectedProperties = [];
@@ -442,10 +440,16 @@
           let data = that.getDataForChart($scope.items, $scope.chart);
           that.optionsManager.itemsBySeriesAndLabels = that.itemsBySeriesAndLabels;
           $scope.chart.labels = data.labels;
-          $scope.chart.data = data.data;
+          $scope.chart.data = {};
           $scope.chart.series = data.series;
           $scope.chart.colours = data.colours;
           that.optionsManager.refreshChartOptions();
+
+          setTimeout(function () {
+            $scope.chart.data = data.data;
+            that.optionsManager.refreshChartOptions();
+            $scope.$apply();
+          }, 100);
         };
 
         $scope.getClassChart = function () {
@@ -499,12 +503,17 @@
 
         $scope.getStyleForChart = function () {
           let canvaContainer = document.querySelector("#" + that.domId + " .chart-container ");
-          let checkIfInaDisplay = document.querySelector(".homePage_evolveView  #" + that.domId + " .chart-container ");
-
-          if (canvaContainer && !checkIfInaDisplay) {
-            let h = window.innerHeight - canvaContainer.getBoundingClientRect().y - 100;
-            h = h + "px";
-            return { height: h };
+          let checkIfInaDisplay = document.querySelector(".homePage_evolveView  #cwLayoutCustomQuery-chart-" + that.nodeID);
+          if (canvaContainer) {
+            if (!checkIfInaDisplay) {
+              let h = window.innerHeight - canvaContainer.getBoundingClientRect().y - 105;
+              h = h + "px";
+              return { height: h };
+            } else {
+              let h = checkIfInaDisplay.getBoundingClientRect().height;
+              h = h + "px";
+              return { height: "100%" };
+            }
           }
         };
 

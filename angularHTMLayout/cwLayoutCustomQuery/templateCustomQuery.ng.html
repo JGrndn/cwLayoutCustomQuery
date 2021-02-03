@@ -1,59 +1,80 @@
-<div ng-controller="cwCustomQueryController">
-  <div
-    data-target-scriptname="{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}"
-    data-node-id="{{::node.nodeID}}"
-    class="cwLayoutCustomQuery-details property-box {{::node.nodeID}}-node-box property-box-asso cw-visible"
-  >
-    <ul class="htmlbox-container property-details {{::node.nodeID}}-details">
-      <li
-        id="htmlbox-header-{{::node.nodeID}}"
-        class="htmlbox-header property-details {{::node.nodeID}}-details property-title {{::node.nodeID}}-title"
+<div
+  id="cwLayoutCustomQuery-{{::node.nodeID}}"
+  class="cwLayoutCustomQuery-wrapper {{::node.nodeID}}-node-box cw-visible"
+  ng-controller="cwCustomQueryController"
+>
+  <div id="cwLayoutCustomQuery-header-{{::node.nodeID}}" class="cwLayoutCustomQuery-header">
+    <div class="cwLayoutCustomQuery-header-displayname">{{$root.cwApi.mapToTranslation(node.mmNode.NodeName)}}</div>
+    <div class="icons-container">
+      <div
+        class="btn page-action no-text chart-icon icon"
+        ng-click="chart.displaySettings=!chart.displaySettings; refreshChart();"
+        ng-class="{'icon-activated':chart.displaySettings, '':!chart.displaySettings}"
       >
-        <div class="cw-property-details-left">
-          <label class="cw-property-title-displayname">{{$root.cwApi.mapToTranslation(node.mmNode.NodeName)}}</label>
-        </div>
-        <div class="cw-property-details-filter-right">
-          <div class="icons-container">
-            <div
-              class="btn page-action no-text chart-icon icon"
-              ng-click="chart.displaySettings=!chart.displaySettings"
-              ng-class="{'icon-activated':chart.displaySettings, '':!chart.displaySettings}"
-            >
-              <i class="fa fa-gear"></i>
-            </div>
-            <div
-              class="btn page-action no-text filter-icon icon"
-              ng-click="displayFilterBox=!displayFilterBox"
-              ng-class="{'icon-activated':displayFilterBox, '':!displayFilterBox}"
-            >
-              <i class="fa fa-filter"></i>
-            </div>
-            <div
-              class="btn page-action no-text list-icon icon"
-              ng-class="{'icon-activated':options.displayResultList}"
-              ng-click="options.displayResultList=!options.displayResultList"
-            >
-              <i class="icon fa" ng-class="{'fa-chevron-left':options.displayResultList, 'fa-chevron-right':!options.displayResultList}"></i>
-            </div>
-            <div class="btn page-action no-text list-icon icon icon-activated" ng-click="copyToClipboardGraph()">
-              <i class="fa fa-files-o"></i>
-            </div>
-            <div class="btn page-action no-text list-icon icon icon-activated" ng-if="isAdminUser()" ng-click="copyToClipboard()">
-              <i class="fa fa-clipboard"></i>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li
-        class="{{::node.nodeID}}-filter-container property-title filter-container"
-        ng-if="displayFilterBox"
-        ng-include="templates.filterContainer"
-      ></li>
-      <li
-        id="{{::node.nodeID}}-{{::objectId}}-value"
-        class="property-details property-value {{::node.nodeID}}-details {{::node.nodeID}}-value"
-        ng-include="templates.dataContainer"
-      ></li>
-    </ul>
+        <i class="fa fa-gear"></i>
+      </div>
+      <div
+        class="btn page-action no-text filter-icon icon"
+        ng-click="displayFilterBox=!displayFilterBox; refreshChart();"
+        ng-class="{'icon-activated':displayFilterBox, '':!displayFilterBox}"
+      >
+        <i class="fa fa-filter"></i>
+      </div>
+      <div
+        class="btn page-action no-text list-icon icon"
+        ng-class="{'icon-activated':options.displayResultList}"
+        ng-click="options.displayResultList=!options.displayResultList; refreshChart();"
+      >
+        <i class="icon fa" ng-class="{'fa-chevron-left':options.displayResultList, 'fa-chevron-right':!options.displayResultList}"></i>
+      </div>
+      <div class="btn page-action no-text list-icon icon icon-activated" ng-click="copyToClipboardGraph()">
+        <i class="fa fa-files-o"></i>
+      </div>
+      <div class="btn page-action no-text list-icon icon icon-activated" ng-if="isAdminUser()" ng-click="copyToClipboard()">
+        <i class="fa fa-clipboard"></i>
+      </div>
+    </div>
   </div>
+
+  <div
+    class="{{::node.nodeID}}-filter-container property-title cwLayoutCustomQuery-filter-container"
+    ng-if="displayFilterBox"
+    ng-include="templates.filterContainer"
+  ></div>
+  <div style="height: 1px" ng-if="options.displayResultList"></div>
+  <div class="{{::node.nodeID}}-filter-container property-title cwLayoutCustomQuery-settings-container" ng-if="chart.displaySettings">
+    <div class="settings-container">
+      <span> {{$root.i18n('label_custom_chart_type')}}</span>
+      <select
+        ng-model="chart.type"
+        ng-options="x as x.label for x in chart.availableCharts| orderBy:'label'"
+        ng-change="refreshChart()"
+        class="select-box"
+      ></select>
+    </div>
+    <div class="settings-container">
+      <span ng-attr-title="{{getSeriesTooltip()}}">{{$root.i18n('label_custom_chart_series')}}</span>
+      <select
+        ng-model="chart.options.series"
+        ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])"
+        ng-change="refreshChart()"
+        class="select-box"
+      ></select>
+    </div>
+    <div class="settings-container" ng-if="chart.type.id!=='pie' && chart.type.id!==''">
+      <span ng-attr-title="{{getAxisTooltip()}}">{{$root.i18n('label_custom_chart_axis')}}</span>
+      <select
+        ng-model="chart.options.pAxis"
+        ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'"
+        ng-change="refreshChart()"
+        class="select-box"
+      ></select>
+    </div>
+  </div>
+
+  <div
+    id="cwLayoutCustomQuery-chart-{{::node.nodeID}}"
+    class="cwLayoutCustomQuery-chart {{::node.nodeID}}-details {{::node.nodeID}}-value"
+    ng-include="templates.dataContainer"
+  ></div>
 </div>

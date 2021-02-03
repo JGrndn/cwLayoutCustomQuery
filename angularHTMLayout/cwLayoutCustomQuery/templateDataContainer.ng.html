@@ -1,22 +1,50 @@
-<div class="custom-query-result-container">
-  <div class="custom-query-result-chart" ng-include="templates.chartContainer"></div>
-  <div class="custom-query-result-list" ng-if="options.displayResultList">
-    <div class="display-result">{{items.length}} {{$root.i18n('label_custom_chart_items_found')}}</div>
-    <ul class="cw-list {{::node.nodeID}} {{::node.nodeID}}-list-box ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}} cw-visible "
-      data-association-key="{{::node.nodeID}}">
-      <li ng-repeat="item in items.slice(((options.pagination.currentPage-1)*options.pagination.itemsPerPage.value), ((options.pagination.currentPage)*options.pagination.itemsPerPage.value))" data-item-name="{{::item.name}}" data-item-id="{{::item.object_id}}" data-item-objecttypescriptname="{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}" class="cw-item {{::node.nodeID}} {{::node.nodeID}}-{{item.object_id}} ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}">
-        <div class="{{::node.nodeID}} ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}">
-          <div ng-bind-html="displayItemString(item)"></div>
-        </div>
-      </li>
-    </ul>
+<div
+  class="custom-query-result-chart"
+  ng-style="getStyleForChart()"
+  class="chart-container cw-visible"
+  ng-if="chart"
+  ng-include="templates.chartContainer"
+></div>
+<div class="custom-query-result-list" ng-if="options.displayResultList">
+  <div class="display-result">{{items.length}} {{$root.i18n('label_custom_chart_items_found')}}</div>
+  <ul
+    class="cw-list {{::node.nodeID}} {{::node.nodeID}}-list-box ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}} cw-visible "
+    data-association-key="{{::node.nodeID}}"
+  >
+    <li
+      ng-repeat="item in items.slice(((options.pagination.currentPage-1)*options.pagination.itemsPerPage.value), ((options.pagination.currentPage)*options.pagination.itemsPerPage.value))"
+      data-item-name="{{::item.name}}"
+      data-item-id="{{::item.object_id}}"
+      data-item-objecttypescriptname="{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}"
+      class="cw-item {{::node.nodeID}} {{::node.nodeID}}-{{item.object_id}} ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}"
+    >
+      <div class="{{::node.nodeID}} ot-{{::node.mmNode.ObjectTypeScriptName.toLowerCase()}}">
+        <div ng-bind-html="displayItemString(item)"></div>
+      </div>
+    </li>
+  </ul>
 
-    <div ng-if="items.length > options.pagination.itemsPerPage.availableValues[0]" class="custom-query-viewby-container cwPropertiesTableContainer">
-      <select class="custom-query-viewby" ng-model="options.pagination.itemsPerPage.value" ng-options="x for x in options.pagination.itemsPerPage.availableValues"></select>
-    </div>
-    <div ng-if="items.length > options.pagination.itemsPerPage.availableValues[0]" class="bootstrap-iso">
-      <ul uib-pagination boundary-links="true" boundary-link-numbers="true" max-size="options.pagination.maxSize" total-items="items.length" ng-model="options.pagination.currentPage" class="pagination-sm" items-per-page="options.pagination.itemsPerPage.value" previous-text="&lsaquo;"
-      next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
-    </div>
+  <div ng-if="items.length > options.pagination.itemsPerPage.availableValues[0]" class="custom-query-viewby-container cwPropertiesTableContainer">
+    <select
+      class="custom-query-viewby"
+      ng-model="options.pagination.itemsPerPage.value"
+      ng-options="x for x in options.pagination.itemsPerPage.availableValues"
+    ></select>
   </div>
-</div>  
+  <div ng-if="items.length > options.pagination.itemsPerPage.availableValues[0]" class="bootstrap-iso">
+    <ul
+      uib-pagination
+      boundary-links="true"
+      boundary-link-numbers="true"
+      max-size="options.pagination.maxSize"
+      total-items="items.length"
+      ng-model="options.pagination.currentPage"
+      class="pagination-sm"
+      items-per-page="options.pagination.itemsPerPage.value"
+      previous-text="&lsaquo;"
+      next-text="&rsaquo;"
+      first-text="&laquo;"
+      last-text="&raquo;"
+    ></ul>
+  </div>
+</div>

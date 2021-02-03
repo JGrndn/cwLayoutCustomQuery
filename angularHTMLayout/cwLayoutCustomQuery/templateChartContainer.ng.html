@@ -1,48 +1,21 @@
-<div class="display-chart-option">
-  <div class="chart-options-container cwPropertiesTableContainer" ng-class="{'cw-visible':chart.displaySettings, 'cw-hidden':!chart.displaySettings}">
-    {{$root.i18n('label_custom_chart_type')}}<select
-      class="custom-query-type-chart"
-      ng-model="chart.type"
-      ng-options="x as x.label for x in chart.availableCharts| orderBy:'label'"
-      ng-change="refreshChart()"
-    ></select>
-    <div class="custom-query-chart-options custom-query-chart-series">
-      <span ng-attr-title="{{getSeriesTooltip()}}">{{$root.i18n('label_custom_chart_series')}}</span
-      ><select
-        ng-model="chart.options.series"
-        ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name' | filter:filterProperties(['Lookup', 'Boolean'])"
-        ng-change="refreshChart()"
-      ></select>
-    </div>
-    <div class="custom-query-chart-options custom-query-chart-axis-property" ng-if="chart.type.id!=='pie' && chart.type.id!==''">
-      <span ng-attr-title="{{getAxisTooltip()}}">{{$root.i18n('label_custom_chart_axis')}}</span
-      ><select
-        ng-model="chart.options.pAxis"
-        ng-options="x.scriptName as x.name for x in selectedProperties | orderBy:'name'"
-        ng-change="refreshChart()"
-      ></select>
-    </div>
-  </div>
-</div>
 <!-- display charts -->
-<div id="canvasWrapper" ng-style="getStyleForChart()" class="chart-container cw-visible" ng-if="chart">
-  <canvas
-    ng-if="chart.type.id === 'horizontal-bar' || chart.type.id === 'horizontal-stack-bar'"
-    class="chart chart-horizontal-bar"
-    chart-data="chart.data"
-    chart-labels="chart.labels"
-    chart-colors="chart.colours"
-    chart-options="chart.options"
-    chart-series="chart.series"
-  ></canvas>
-  <canvas
-    ng-if="chart.type.id !== 'horizontal-bar' && chart.type.id !== 'horizontal-stack-bar'"
-    class="chart chart-base {{chart.type.class}}"
-    chart-type="chart.type.type"
-    chart-data="chart.data"
-    chart-labels="chart.labels"
-    chart-colors="chart.colours"
-    chart-options="chart.options"
-    chart-series="chart.series"
-  ></canvas>
-</div>
+
+<canvas
+  ng-if="chart.type.id === 'horizontal-bar' || chart.type.id === 'horizontal-stack-bar'"
+  class="chart chart-horizontal-bar"
+  chart-data="chart.data"
+  chart-labels="chart.labels"
+  chart-colors="chart.colours"
+  chart-options="chart.options"
+  chart-series="chart.series"
+></canvas>
+<canvas
+  ng-if="chart.type.id !== 'horizontal-bar' && chart.type.id !== 'horizontal-stack-bar'"
+  class="chart chart-base {{chart.type.class}}"
+  chart-type="chart.type.type"
+  chart-data="chart.data"
+  chart-labels="chart.labels"
+  chart-colors="chart.colours"
+  chart-options="chart.options"
+  chart-series="chart.series"
+></canvas>
