@@ -131,8 +131,42 @@
       flex: 1 1 auto;
       height: 10px;
       width: 100%;
+      margin-bottom: 1.25rem;
       .custom-query-result-list {
         flex: 0 0 25rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        .custom-query-result-list-items {
+          margin-top: 1.25rem;
+          flex: 1 1 auto;
+          height: 10px;
+          overflow-y: scroll;
+          ul.cw-list {
+            margin: 0px;
+          }
+        }
+        .custom-query-result-list-footer {
+          flex: 0 0 3rem;
+          margin-top: 1.25rem;
+          height: 30px;
+          display: flex;
+          justify-content: flex-start;
+          align-items: start;
+          .custom-query-result-list-footer-pagesNumber {
+            width: 4rem;
+            height: 30px;
+            margin-left: 0.75rem;
+          }
+          ul {
+            margin: 0;
+          }
+          .display-result {
+            margin-left: 0.75rem;
+            margin-top: 7px;
+            margin-right: 0.75rem;
+          }
+        }
       }
       .custom-query-result-chart {
         flex: 1 1 auto;

@@ -510,9 +510,7 @@
               h = h + "px";
               return { height: h };
             } else {
-              let h = checkIfInaDisplay.getBoundingClientRect().height;
-              h = h + "px";
-              return { height: "100%" };
+              return { height: "calc(100% - 2px)" };
             }
           }
         };
