@@ -37,6 +37,10 @@
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        legend : {
+          position :'right',
+          display:true
+        },
         onClick: function (event, array) {
           let element = this.getElementAtEvent(event);
           if (element.length > 0) {
@@ -156,8 +160,11 @@
       };
     } else if (this.chartOptions.options.hasOwnProperty("scales")) {
       delete this.chartOptions.options.scales;
-    }
-    this.chartOptions.options.responsive = true;
+    }this.chartOptions.options.responsive = true;
+    this.chartOptions.options.legend = {
+      position :'right',
+      display:true
+    };
     this.chartOptions.options.maintainAspectRatio = false;
     this.chartOptions.options.responsiveAnimationDuration = 1000;
   };

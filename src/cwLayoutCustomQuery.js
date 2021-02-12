@@ -114,7 +114,7 @@
       this.items.push(child);
     }
     let cwvisible = this.allItems.length > 0 ? "cw-visible" : "";
-    output.push('<div id="', this.domId, '" class="cwLayoutCustomQuery" ', cwvisible, "></div>");
+    output.push('<div style="{height: calc(100vh - 92px - 1.25rem);}" id="', this.domId, '" class="cwLayoutCustomQuery" ', cwvisible, "></div>");
 
     // metadata
     this.selectedProperties = [];
