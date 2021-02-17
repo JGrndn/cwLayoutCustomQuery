@@ -27,7 +27,6 @@
 /* DIAGRAM OVERLAY */
 .cwLayoutCustomQuery {
   width: 100%;
-  height: calc(100vh - 92px - 1.25rem);
 }
 .cwLayoutCustomQuery .cwLayoutCustomQuery-wrapper {
   width: 100%;
