@@ -114,7 +114,11 @@
       this.items.push(child);
     }
     let cwvisible = this.allItems.length > 0 ? "cw-visible" : "";
-    output.push('<div style="height: calc(100vh - 94px - 1.5rem)" id="', this.domId, '" class="cwLayoutCustomQuery" ', cwvisible, "></div>");
+    if (document.querySelector(".homePage_evolveView")) {
+      output.push('<div id="', this.domId, '" class="cwLayoutCustomQuery" ', cwvisible, "></div>");
+    } else {
+      output.push('<div style="height: calc(100vh - 94px - 1.5rem)" id="', this.domId, '" class="cwLayoutCustomQuery" ', cwvisible, "></div>");
+    }
 
     // metadata
     this.selectedProperties = [];
